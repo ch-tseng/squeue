@@ -1,0 +1,28 @@
+[user]
+owner = chtseng
+notify_line = 0
+notify_email = 0
+notify_sms = 0
+
+[job]
+submit_from = chtseng-ml2
+submit_time = 29/04/2022 17:26:13
+job_path = /data/squeue/test/test_job.sh
+run_after_submit_min = 30
+esti_execute_hours = 32
+want_finish_after_hours = 48
+
+[host]
+specified_host = none
+reqs_cpus = 8
+reqs_ram = 16000
+reqs_gram = 20000
+
+[status]
+execute_host = ML4
+process_id = 44896
+execute_start_time = 29/04/2022 18:48:01
+execute_live_time = 29/04/2022 18:48:01
+execute_end_time = 29/04/2022 18:58:02
+execute_status = finished
+execute_log = /data/squeue/jobs/logs/ML4_gpu0_1651224373.log

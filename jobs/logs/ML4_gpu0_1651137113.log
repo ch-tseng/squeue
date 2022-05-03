@@ -1,0 +1,1979 @@
+ CUDA-version: 11040 (11060), cuDNN: 8.2.2, CUDNN_HALF=1, GPU count: 2  
+ CUDNN_HALF=1 
+ OpenCV version: 4.2.0
+ 0 : compute_capability = 860, cudnn_half = 1, GPU: NVIDIA GeForce RTX 3090 
+   layer   filters  size/strd(dil)      input                output
+   0 conv     16       3 x 3/ 1    416 x 416 x   3 ->  416 x 416 x  16 0.150 BF
+   1 max                2x 2/ 2    416 x 416 x  16 ->  208 x 208 x  16 0.003 BF
+   2 conv     32       3 x 3/ 1    208 x 208 x  16 ->  208 x 208 x  32 0.399 BF
+   3 max                2x 2/ 2    208 x 208 x  32 ->  104 x 104 x  32 0.001 BF
+   4 conv     64       3 x 3/ 1    104 x 104 x  32 ->  104 x 104 x  64 0.399 BF
+   5 max                2x 2/ 2    104 x 104 x  64 ->   52 x  52 x  64 0.001 BF
+   6 conv    128       3 x 3/ 1     52 x  52 x  64 ->   52 x  52 x 128 0.399 BF
+   7 max                2x 2/ 2     52 x  52 x 128 ->   26 x  26 x 128 0.000 BF
+   8 conv    256       3 x 3/ 1     26 x  26 x 128 ->   26 x  26 x 256 0.399 BF
+   9 max                2x 2/ 2     26 x  26 x 256 ->   13 x  13 x 256 0.000 BF
+  10 conv    512       3 x 3/ 1     13 x  13 x 256 ->   13 x  13 x 512 0.399 BF
+  11 max                2x 2/ 1     13 x  13 x 512 ->   13 x  13 x 512 0.000 BF
+  12 conv   1024       3 x 3/ 1     13 x  13 x 512 ->   13 x  13 x1024 1.595 BF
+  13 conv    256       1 x 1/ 1     13 x  13 x1024 ->   13 x  13 x 256 0.089 BF
+  14 conv    512       3 x 3/ 1     13 x  13 x 256 ->   13 x  13 x 512 0.399 BF
+  15 conv     30       1 x 1/ 1     13 x  13 x 512 ->   13 x  13 x  30 0.005 BF
+  16 yolo
+[yolo] params: iou loss: mse (2), iou_norm: 0.75, obj_norm: 1.00, cls_norm: 1.00, delta_norm: 1.00, scale_x_y: 1.00
+  17 route  13 		                           ->   13 x  13 x 256 
+  18 conv    128       1 x 1/ 1     13 x  13 x 256 ->   13 x  13 x 128 0.011 BF
+  19 upsample                 2x    13 x  13 x 128 ->   26 x  26 x 128
+  20 route  19 8 	                           ->   26 x  26 x 384 
+  21 conv    256       3 x 3/ 1     26 x  26 x 384 ->   26 x  26 x 256 1.196 BF
+  22 conv     30       1 x 1/ 1     26 x  26 x 256 ->   26 x  26 x  30 0.010 BF
+  23 yolo
+[yolo] params: iou loss: mse (2), iou_norm: 0.75, obj_norm: 1.00, cls_norm: 1.00, delta_norm: 1.00, scale_x_y: 1.00
+Total BFLOPS 5.454 
+avg_outputs = 325691 
+ Allocate additional workspace_size = 357.38 MB 
+Loading weights from /home/chtseng/tools/Make_YOLO_Train/pretrained/yolov3-tiny.conv.15...0
+yolov3-tiny
+net.optimized_memory = 0 
+mini_batch = 43, batch = 129, time_steps = 1, train = 1 
+Create CUDA-stream - 0 
+ Create cudnn-handle 0 
+Done! Loaded 15 layers from weights-file 
+ Create 6 permanent cpu-threads 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.359111), count: 30, class_loss = 242.171829, iou_loss = 1.767124, total_loss = 243.938950 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.256738), count: 214, class_loss = 1203.386108, iou_loss = 21.725018, total_loss = 1225.111084 
+ total_bbox = 244, rewritten_bbox = 3.278688 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.405837), count: 30, class_loss = 241.759155, iou_loss = 1.470204, total_loss = 243.229355 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.208176), count: 58, class_loss = 1199.696655, iou_loss = 5.273165, total_loss = 1204.969849 
+ total_bbox = 332, rewritten_bbox = 3.012048 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.431902), count: 26, class_loss = 241.635651, iou_loss = 1.454715, total_loss = 243.090363 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.297211), count: 68, class_loss = 1199.078247, iou_loss = 6.363008, total_loss = 1205.441284 
+ total_bbox = 426, rewritten_bbox = 2.816901 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+
+ seen 64, trained: 0 K-images (0 Kilo-batches_64) 
+Learning Rate: 0.001, Momentum: 0.9, Decay: 0.0005
+ Detection layer: 16 - type = 28 
+ Detection layer: 23 - type = 28 
+Resizing, random_coef = 1.40 
+
+ 608 x 608 
+ try to allocate additional workspace_size = 763.18 MB 
+ CUDA allocate done! 
+Loaded: 0.000027 seconds
+
+ 1: 727.630127, 727.630127 avg loss, 0.000000 rate, 0.763452 seconds, 129 images, -1.000000 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.389462), count: 42, class_loss = 243.009445, iou_loss = 2.629519, total_loss = 245.638962 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.249902), count: 163, class_loss = 1203.763916, iou_loss = 19.446131, total_loss = 1223.210083 
+ total_bbox = 631, rewritten_bbox = 3.328051 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.338262), count: 31, class_loss = 241.672195, iou_loss = 2.397529, total_loss = 244.069717 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.226164), count: 61, class_loss = 1200.437988, iou_loss = 5.275436, total_loss = 1205.713379 
+ total_bbox = 723, rewritten_bbox = 3.319502 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.400735), count: 31, class_loss = 242.772842, iou_loss = 1.554869, total_loss = 244.327713 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.275031), count: 69, class_loss = 1200.575439, iou_loss = 5.953397, total_loss = 1206.528809 
+ total_bbox = 823, rewritten_bbox = 3.037667 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000036 seconds
+
+ 2: 728.248047, 727.691895 avg loss, 0.000000 rate, 0.627602 seconds, 258 images, 10.603789 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.371005), count: 55, class_loss = 241.724472, iou_loss = 3.330282, total_loss = 245.054749 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.292854), count: 147, class_loss = 1201.763428, iou_loss = 13.848383, total_loss = 1215.611816 
+ total_bbox = 1025, rewritten_bbox = 2.634146 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.406793), count: 36, class_loss = 243.012695, iou_loss = 2.100359, total_loss = 245.113052 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.290117), count: 107, class_loss = 1204.666748, iou_loss = 8.632449, total_loss = 1213.299194 
+ total_bbox = 1168, rewritten_bbox = 2.397260 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.398684), count: 68, class_loss = 243.542419, iou_loss = 3.529297, total_loss = 247.071716 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.315979), count: 242, class_loss = 1204.776367, iou_loss = 17.655432, total_loss = 1222.431763 
+ total_bbox = 1478, rewritten_bbox = 1.962111 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000037 seconds
+
+ 3: 731.430359, 728.065735 avg loss, 0.000000 rate, 0.644173 seconds, 387 images, 10.584920 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.301791), count: 50, class_loss = 242.892349, iou_loss = 4.674441, total_loss = 247.566788 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.303008), count: 306, class_loss = 1207.685547, iou_loss = 25.763172, total_loss = 1233.448730 
+ total_bbox = 1834, rewritten_bbox = 2.290076 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.392153), count: 28, class_loss = 241.180191, iou_loss = 1.619663, total_loss = 242.799850 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.253686), count: 65, class_loss = 1201.654419, iou_loss = 6.279433, total_loss = 1207.933838 
+ total_bbox = 1927, rewritten_bbox = 2.283342 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.475144), count: 40, class_loss = 242.731445, iou_loss = 1.397279, total_loss = 244.128723 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.359656), count: 82, class_loss = 1201.211792, iou_loss = 6.348111, total_loss = 1207.559814 
+ total_bbox = 2049, rewritten_bbox = 2.147389 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000037 seconds
+
+ 4: 730.572998, 728.316467 avg loss, 0.000000 rate, 0.639763 seconds, 516 images, 10.568540 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.363487), count: 29, class_loss = 241.620819, iou_loss = 1.595544, total_loss = 243.216370 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.254902), count: 86, class_loss = 1200.628296, iou_loss = 9.597020, total_loss = 1210.225342 
+ total_bbox = 2164, rewritten_bbox = 2.218115 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.362255), count: 29, class_loss = 241.220612, iou_loss = 1.812114, total_loss = 243.032730 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.298156), count: 35, class_loss = 1201.600464, iou_loss = 3.238645, total_loss = 1204.839111 
+ total_bbox = 2228, rewritten_bbox = 2.154399 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.402510), count: 32, class_loss = 243.235870, iou_loss = 1.461028, total_loss = 244.696899 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.227378), count: 84, class_loss = 1199.109497, iou_loss = 8.923238, total_loss = 1208.032837 
+ total_bbox = 2344, rewritten_bbox = 2.090444 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000063 seconds
+
+ 5: 725.673889, 728.052185 avg loss, 0.000000 rate, 0.632359 seconds, 645 images, 10.551710 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.365407), count: 57, class_loss = 240.618271, iou_loss = 4.027253, total_loss = 244.645523 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.279803), count: 95, class_loss = 1199.137939, iou_loss = 9.871275, total_loss = 1209.009155 
+ total_bbox = 2496, rewritten_bbox = 2.123397 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.372794), count: 27, class_loss = 241.747681, iou_loss = 1.845658, total_loss = 243.593338 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.303485), count: 27, class_loss = 1199.140747, iou_loss = 1.884357, total_loss = 1201.025146 
+ total_bbox = 2550, rewritten_bbox = 2.078431 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.394220), count: 28, class_loss = 241.508087, iou_loss = 1.329079, total_loss = 242.837158 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243438), count: 30, class_loss = 1198.235229, iou_loss = 2.407794, total_loss = 1200.643066 
+ total_bbox = 2608, rewritten_bbox = 2.032209 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000044 seconds
+
+ 6: 723.625610, 727.609497 avg loss, 0.000000 rate, 0.621084 seconds, 774 images, 10.534021 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.335209), count: 44, class_loss = 242.232422, iou_loss = 3.225018, total_loss = 245.457443 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.260137), count: 62, class_loss = 1197.445435, iou_loss = 6.227471, total_loss = 1203.672974 
+ total_bbox = 2714, rewritten_bbox = 2.100221 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.464210), count: 20, class_loss = 241.051117, iou_loss = 0.873887, total_loss = 241.925003 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.356202), count: 13, class_loss = 1198.762573, iou_loss = 0.813318, total_loss = 1199.575928 
+ total_bbox = 2747, rewritten_bbox = 2.074991 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.388966), count: 35, class_loss = 241.282379, iou_loss = 2.302189, total_loss = 243.584579 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.283629), count: 25, class_loss = 1196.052856, iou_loss = 2.825763, total_loss = 1198.878662 
+ total_bbox = 2807, rewritten_bbox = 2.030638 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000080 seconds
+
+ 7: 722.182434, 727.066772 avg loss, 0.000000 rate, 0.613114 seconds, 903 images, 10.514939 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.395277), count: 66, class_loss = 242.543427, iou_loss = 4.043423, total_loss = 246.586838 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243830), count: 203, class_loss = 1202.689697, iou_loss = 20.446402, total_loss = 1223.136108 
+ total_bbox = 3076, rewritten_bbox = 2.048115 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.287161), count: 43, class_loss = 240.905426, iou_loss = 4.836709, total_loss = 245.742142 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.238478), count: 136, class_loss = 1204.620605, iou_loss = 12.522257, total_loss = 1217.142944 
+ total_bbox = 3255, rewritten_bbox = 2.089094 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.366480), count: 30, class_loss = 239.638763, iou_loss = 1.793423, total_loss = 241.432190 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.305260), count: 42, class_loss = 1201.021851, iou_loss = 3.376908, total_loss = 1204.398804 
+ total_bbox = 3327, rewritten_bbox = 2.073941 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000080 seconds
+
+ 8: 729.739807, 727.334106 avg loss, 0.000000 rate, 0.635013 seconds, 1032 images, 10.494945 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.364651), count: 27, class_loss = 241.528381, iou_loss = 1.560570, total_loss = 243.088959 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.207917), count: 64, class_loss = 1197.383057, iou_loss = 8.666333, total_loss = 1206.049438 
+ total_bbox = 3418, rewritten_bbox = 2.369807 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.383583), count: 35, class_loss = 242.275070, iou_loss = 1.825854, total_loss = 244.100922 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243230), count: 270, class_loss = 1207.753296, iou_loss = 30.657339, total_loss = 1238.410645 
+ total_bbox = 3723, rewritten_bbox = 2.363685 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.380679), count: 51, class_loss = 243.492828, iou_loss = 2.897779, total_loss = 246.390594 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.219006), count: 191, class_loss = 1202.648682, iou_loss = 23.800417, total_loss = 1226.449097 
+ total_bbox = 3965, rewritten_bbox = 2.522068 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000044 seconds
+
+ 9: 734.081665, 728.008850 avg loss, 0.000000 rate, 0.663057 seconds, 1161 images, 10.478190 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.381930), count: 34, class_loss = 242.631561, iou_loss = 2.010947, total_loss = 244.642502 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.275057), count: 38, class_loss = 1199.098145, iou_loss = 3.760538, total_loss = 1202.858643 
+ total_bbox = 4037, rewritten_bbox = 2.477087 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.326785), count: 30, class_loss = 241.147568, iou_loss = 2.272302, total_loss = 243.419876 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.274308), count: 20, class_loss = 1196.906006, iou_loss = 2.016624, total_loss = 1198.922607 
+ total_bbox = 4087, rewritten_bbox = 2.446783 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.356040), count: 26, class_loss = 242.012451, iou_loss = 1.725563, total_loss = 243.738007 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.227333), count: 73, class_loss = 1199.881104, iou_loss = 7.056777, total_loss = 1206.937866 
+ total_bbox = 4186, rewritten_bbox = 2.556139 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000070 seconds
+
+ 10: 723.419922, 727.549927 avg loss, 0.000000 rate, 0.630837 seconds, 1290 images, 10.465490 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.375804), count: 28, class_loss = 171.677216, iou_loss = 1.598610, total_loss = 173.275818 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.248864), count: 33, class_loss = 850.473572, iou_loss = 3.431413, total_loss = 853.904968 
+ total_bbox = 4247, rewritten_bbox = 2.519425 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.336853), count: 29, class_loss = 171.901108, iou_loss = 1.813499, total_loss = 173.714600 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.277837), count: 50, class_loss = 851.569214, iou_loss = 3.940952, total_loss = 855.510193 
+ total_bbox = 4326, rewritten_bbox = 2.473417 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.455568), count: 30, class_loss = 171.608368, iou_loss = 1.235522, total_loss = 172.843903 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.290587), count: 91, class_loss = 852.544983, iou_loss = 6.847475, total_loss = 859.392456 
+ total_bbox = 4447, rewritten_bbox = 2.518552 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 512 x 512 
+ try to allocate additional workspace_size = 541.26 MB 
+ CUDA allocate done! 
+Loaded: 0.023172 seconds
+
+ 11: 514.773621, 706.272278 avg loss, 0.000000 rate, 0.466255 seconds, 1419 images, 10.448445 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.399423), count: 36, class_loss = 172.531723, iou_loss = 1.757029, total_loss = 174.288757 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.295548), count: 98, class_loss = 851.585205, iou_loss = 6.944767, total_loss = 858.529968 
+ total_bbox = 4581, rewritten_bbox = 2.444881 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.379480), count: 28, class_loss = 171.807693, iou_loss = 1.567326, total_loss = 173.375015 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.270062), count: 51, class_loss = 849.198669, iou_loss = 4.489916, total_loss = 853.688599 
+ total_bbox = 4660, rewritten_bbox = 2.424893 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.376954), count: 24, class_loss = 171.188644, iou_loss = 1.589514, total_loss = 172.778168 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.238775), count: 148, class_loss = 855.841125, iou_loss = 17.187592, total_loss = 873.028687 
+ total_bbox = 4832, rewritten_bbox = 2.566225 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000046 seconds
+
+ 12: 517.614807, 687.406555 avg loss, 0.000000 rate, 0.490201 seconds, 1548 images, 10.411922 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.352869), count: 18, class_loss = 171.892380, iou_loss = 1.299918, total_loss = 173.192307 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.309737), count: 98, class_loss = 853.097839, iou_loss = 7.646802, total_loss = 860.744629 
+ total_bbox = 4948, rewritten_bbox = 2.546484 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.336213), count: 36, class_loss = 171.692307, iou_loss = 2.362816, total_loss = 174.055115 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.259444), count: 106, class_loss = 852.123352, iou_loss = 13.037427, total_loss = 865.160767 
+ total_bbox = 5090, rewritten_bbox = 2.554028 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.369875), count: 22, class_loss = 171.837738, iou_loss = 1.190339, total_loss = 173.028076 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.335314), count: 28, class_loss = 849.085754, iou_loss = 2.123365, total_loss = 851.209106 
+ total_bbox = 5140, rewritten_bbox = 2.529183 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000102 seconds
+
+ 13: 516.231689, 670.289062 avg loss, 0.000000 rate, 0.478649 seconds, 1677 images, 10.375877 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.355649), count: 39, class_loss = 172.931458, iou_loss = 2.332633, total_loss = 175.264084 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.270022), count: 100, class_loss = 852.219849, iou_loss = 9.266988, total_loss = 861.486816 
+ total_bbox = 5279, rewritten_bbox = 2.670960 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.387953), count: 25, class_loss = 170.931778, iou_loss = 1.692780, total_loss = 172.624557 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.283729), count: 39, class_loss = 849.571838, iou_loss = 3.590570, total_loss = 853.162415 
+ total_bbox = 5343, rewritten_bbox = 2.638967 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.366879), count: 26, class_loss = 170.897430, iou_loss = 1.657329, total_loss = 172.554764 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.355092), count: 26, class_loss = 848.786987, iou_loss = 1.703216, total_loss = 850.490173 
+ total_bbox = 5395, rewritten_bbox = 2.613531 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000045 seconds
+
+ 14: 514.263794, 654.686523 avg loss, 0.000000 rate, 0.482529 seconds, 1806 images, 10.338595 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.407152), count: 22, class_loss = 171.331558, iou_loss = 0.821005, total_loss = 172.152557 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.242675), count: 62, class_loss = 852.617737, iou_loss = 5.249546, total_loss = 857.867249 
+ total_bbox = 5479, rewritten_bbox = 2.591714 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.350390), count: 40, class_loss = 171.295700, iou_loss = 2.658975, total_loss = 173.954681 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.240597), count: 163, class_loss = 854.093445, iou_loss = 16.993187, total_loss = 871.086670 
+ total_bbox = 5682, rewritten_bbox = 2.639915 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.332332), count: 29, class_loss = 171.831650, iou_loss = 1.706543, total_loss = 173.538193 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.356290), count: 211, class_loss = 857.474182, iou_loss = 12.673965, total_loss = 870.148132 
+ total_bbox = 5922, rewritten_bbox = 2.701790 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000050 seconds
+
+ 15: 519.791260, 641.197021 avg loss, 0.000000 rate, 0.474961 seconds, 1935 images, 10.302216 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.301305), count: 31, class_loss = 171.992218, iou_loss = 2.654876, total_loss = 174.647095 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.285639), count: 66, class_loss = 850.934570, iou_loss = 6.429778, total_loss = 857.364380 
+ total_bbox = 6019, rewritten_bbox = 2.674863 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.400790), count: 34, class_loss = 171.959564, iou_loss = 1.727812, total_loss = 173.687378 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.284098), count: 113, class_loss = 855.134277, iou_loss = 10.607104, total_loss = 865.741394 
+ total_bbox = 6166, rewritten_bbox = 2.659747 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.432893), count: 29, class_loss = 172.375458, iou_loss = 1.466944, total_loss = 173.842392 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.214579), count: 156, class_loss = 851.860352, iou_loss = 20.357649, total_loss = 872.218018 
+ total_bbox = 6351, rewritten_bbox = 2.598016 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000046 seconds
+
+ 16: 519.583435, 629.035645 avg loss, 0.000000 rate, 0.487336 seconds, 2064 images, 10.265148 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.375101), count: 32, class_loss = 172.117599, iou_loss = 2.524789, total_loss = 174.642395 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.269491), count: 146, class_loss = 853.188782, iou_loss = 13.864735, total_loss = 867.053528 
+ total_bbox = 6529, rewritten_bbox = 2.741614 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.429356), count: 24, class_loss = 171.156189, iou_loss = 1.220964, total_loss = 172.377151 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.312304), count: 46, class_loss = 850.702942, iou_loss = 3.256087, total_loss = 853.959045 
+ total_bbox = 6599, rewritten_bbox = 2.727686 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.406305), count: 43, class_loss = 171.162949, iou_loss = 2.328613, total_loss = 173.491562 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.252140), count: 303, class_loss = 857.295776, iou_loss = 30.222837, total_loss = 887.518616 
+ total_bbox = 6945, rewritten_bbox = 2.807775 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000076 seconds
+
+ 17: 521.507019, 618.282776 avg loss, 0.000000 rate, 0.509214 seconds, 2193 images, 10.230168 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.412202), count: 20, class_loss = 170.588043, iou_loss = 1.141613, total_loss = 171.729660 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.255239), count: 109, class_loss = 851.379456, iou_loss = 10.181686, total_loss = 861.561157 
+ total_bbox = 7074, rewritten_bbox = 2.798982 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.357851), count: 28, class_loss = 171.547379, iou_loss = 1.638399, total_loss = 173.185791 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.215069), count: 190, class_loss = 855.767883, iou_loss = 18.800146, total_loss = 874.568054 
+ total_bbox = 7292, rewritten_bbox = 2.893582 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.356770), count: 43, class_loss = 171.863297, iou_loss = 2.605026, total_loss = 174.468323 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.233715), count: 100, class_loss = 850.560974, iou_loss = 10.590753, total_loss = 861.151733 
+ total_bbox = 7435, rewritten_bbox = 2.932078 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000046 seconds
+
+ 18: 519.444092, 608.398926 avg loss, 0.000000 rate, 0.486095 seconds, 2322 images, 10.198578 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.357570), count: 21, class_loss = 171.489670, iou_loss = 1.436353, total_loss = 172.926025 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.207253), count: 91, class_loss = 850.084106, iou_loss = 11.299782, total_loss = 861.383911 
+ total_bbox = 7547, rewritten_bbox = 2.915066 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.391720), count: 22, class_loss = 171.337982, iou_loss = 1.005110, total_loss = 172.343094 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.265882), count: 75, class_loss = 851.594482, iou_loss = 7.596112, total_loss = 859.190613 
+ total_bbox = 7644, rewritten_bbox = 2.917321 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.367908), count: 37, class_loss = 171.520599, iou_loss = 2.349780, total_loss = 173.870377 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.259339), count: 141, class_loss = 853.637878, iou_loss = 12.332031, total_loss = 865.969910 
+ total_bbox = 7822, rewritten_bbox = 2.991562 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000046 seconds
+
+ 19: 517.613953, 599.320435 avg loss, 0.000000 rate, 0.461449 seconds, 2451 images, 10.164088 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.405486), count: 23, class_loss = 171.178238, iou_loss = 0.940100, total_loss = 172.118332 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.277624), count: 83, class_loss = 852.153259, iou_loss = 6.342115, total_loss = 858.495361 
+ total_bbox = 7928, rewritten_bbox = 2.989405 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.332846), count: 66, class_loss = 173.115265, iou_loss = 5.457963, total_loss = 178.573227 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.276109), count: 73, class_loss = 850.854309, iou_loss = 7.897711, total_loss = 858.752014 
+ total_bbox = 8067, rewritten_bbox = 2.975084 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.339800), count: 24, class_loss = 171.353912, iou_loss = 1.564147, total_loss = 172.918060 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.275771), count: 125, class_loss = 853.030151, iou_loss = 10.275527, total_loss = 863.305664 
+ total_bbox = 8216, rewritten_bbox = 3.006329 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000052 seconds
+
+ 20: 517.360474, 591.124451 avg loss, 0.000000 rate, 0.487032 seconds, 2580 images, 10.126521 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.328930), count: 28, class_loss = 171.695724, iou_loss = 2.162143, total_loss = 173.857864 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.280561), count: 68, class_loss = 851.403503, iou_loss = 5.566588, total_loss = 856.970093 
+ total_bbox = 8312, rewritten_bbox = 2.983638 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.382234), count: 23, class_loss = 171.355392, iou_loss = 1.170910, total_loss = 172.526306 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.196878), count: 185, class_loss = 853.929565, iou_loss = 23.368460, total_loss = 877.298035 
+ total_bbox = 8520, rewritten_bbox = 3.086854 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.372825), count: 30, class_loss = 171.923004, iou_loss = 1.764944, total_loss = 173.687958 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.281513), count: 51, class_loss = 852.585632, iou_loss = 6.049418, total_loss = 858.635071 
+ total_bbox = 8601, rewritten_bbox = 3.069411 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 512 x 512 
+ try to allocate additional workspace_size = 541.26 MB 
+ CUDA allocate done! 
+Loaded: 0.046706 seconds
+
+ 21: 518.829224, 583.894958 avg loss, 0.000000 rate, 0.478703 seconds, 2709 images, 10.092880 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.357393), count: 22, class_loss = 171.124649, iou_loss = 1.227494, total_loss = 172.352142 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.304624), count: 54, class_loss = 850.742981, iou_loss = 4.632086, total_loss = 855.375061 
+ total_bbox = 8677, rewritten_bbox = 3.077100 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.361746), count: 22, class_loss = 172.024597, iou_loss = 1.381030, total_loss = 173.405624 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.274546), count: 65, class_loss = 850.530945, iou_loss = 7.060774, total_loss = 857.591736 
+ total_bbox = 8764, rewritten_bbox = 3.046554 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.340372), count: 43, class_loss = 171.876266, iou_loss = 2.958496, total_loss = 174.834763 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.295709), count: 64, class_loss = 849.896423, iou_loss = 5.930778, total_loss = 855.827209 
+ total_bbox = 8870, rewritten_bbox = 3.043968 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000045 seconds
+
+ 22: 514.897766, 576.995239 avg loss, 0.000000 rate, 0.470943 seconds, 2838 images, 10.064895 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.402304), count: 38, class_loss = 171.206970, iou_loss = 2.198810, total_loss = 173.405777 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262289), count: 241, class_loss = 857.429260, iou_loss = 25.788517, total_loss = 883.217773 
+ total_bbox = 9148, rewritten_bbox = 3.104504 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.343238), count: 20, class_loss = 171.315262, iou_loss = 1.652196, total_loss = 172.967453 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.259217), count: 26, class_loss = 850.362183, iou_loss = 2.394895, total_loss = 852.757080 
+ total_bbox = 9194, rewritten_bbox = 3.088971 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.359905), count: 28, class_loss = 171.324097, iou_loss = 1.609057, total_loss = 172.933151 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239604), count: 111, class_loss = 853.067139, iou_loss = 12.974473, total_loss = 866.041626 
+ total_bbox = 9333, rewritten_bbox = 3.107254 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000044 seconds
+
+ 23: 520.220459, 571.317749 avg loss, 0.000000 rate, 0.499695 seconds, 2967 images, 10.029634 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.380549), count: 26, class_loss = 171.916748, iou_loss = 1.545751, total_loss = 173.462509 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.210559), count: 82, class_loss = 853.252258, iou_loss = 11.498819, total_loss = 864.751099 
+ total_bbox = 9441, rewritten_bbox = 3.145853 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.373654), count: 19, class_loss = 171.382034, iou_loss = 1.032340, total_loss = 172.414368 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.206769), count: 232, class_loss = 857.196777, iou_loss = 26.394077, total_loss = 883.590820 
+ total_bbox = 9692, rewritten_bbox = 3.342963 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.391502), count: 37, class_loss = 171.446274, iou_loss = 2.116824, total_loss = 173.563095 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.248835), count: 164, class_loss = 853.351257, iou_loss = 20.938135, total_loss = 874.289429 
+ total_bbox = 9893, rewritten_bbox = 3.416557 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000060 seconds
+
+ 24: 523.678528, 566.553833 avg loss, 0.000000 rate, 0.481900 seconds, 3096 images, 9.998715 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.429723), count: 27, class_loss = 171.317886, iou_loss = 1.182265, total_loss = 172.500153 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.294528), count: 58, class_loss = 852.875000, iou_loss = 6.197402, total_loss = 859.072388 
+ total_bbox = 9978, rewritten_bbox = 3.407496 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.378872), count: 38, class_loss = 172.370071, iou_loss = 2.588992, total_loss = 174.959061 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.197654), count: 151, class_loss = 853.731262, iou_loss = 26.218842, total_loss = 879.950134 
+ total_bbox = 10167, rewritten_bbox = 3.393331 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.354937), count: 32, class_loss = 171.848755, iou_loss = 1.884255, total_loss = 173.733017 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.260476), count: 86, class_loss = 852.364258, iou_loss = 8.984648, total_loss = 861.348938 
+ total_bbox = 10285, rewritten_bbox = 3.412737 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000065 seconds
+
+ 25: 520.260681, 561.924500 avg loss, 0.000000 rate, 0.496441 seconds, 3225 images, 9.965635 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.369966), count: 16, class_loss = 171.518524, iou_loss = 0.740064, total_loss = 172.258591 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.278737), count: 31, class_loss = 849.613647, iou_loss = 2.615825, total_loss = 852.229492 
+ total_bbox = 10332, rewritten_bbox = 3.406891 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.340315), count: 29, class_loss = 171.848526, iou_loss = 1.740893, total_loss = 173.589417 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.260216), count: 56, class_loss = 853.006348, iou_loss = 5.138445, total_loss = 858.144775 
+ total_bbox = 10417, rewritten_bbox = 3.379092 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.373625), count: 39, class_loss = 172.037048, iou_loss = 2.998229, total_loss = 175.035278 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.267295), count: 179, class_loss = 855.994629, iou_loss = 15.407613, total_loss = 871.402222 
+ total_bbox = 10635, rewritten_bbox = 3.328632 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000035 seconds
+
+ 26: 517.109985, 557.443054 avg loss, 0.000000 rate, 0.471734 seconds, 3354 images, 9.934904 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.347702), count: 44, class_loss = 172.790329, iou_loss = 2.746923, total_loss = 175.537262 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239020), count: 157, class_loss = 853.967407, iou_loss = 16.638807, total_loss = 870.606201 
+ total_bbox = 10836, rewritten_bbox = 3.340716 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.412649), count: 35, class_loss = 171.863159, iou_loss = 1.749092, total_loss = 173.612244 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.281026), count: 80, class_loss = 850.302856, iou_loss = 8.097020, total_loss = 858.399902 
+ total_bbox = 10951, rewritten_bbox = 3.378687 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.326440), count: 20, class_loss = 172.226517, iou_loss = 1.443041, total_loss = 173.669556 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.202455), count: 94, class_loss = 854.813599, iou_loss = 13.155251, total_loss = 867.968811 
+ total_bbox = 11065, rewritten_bbox = 3.416177 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000048 seconds
+
+ 27: 519.965637, 553.695312 avg loss, 0.000000 rate, 0.478998 seconds, 3483 images, 9.901045 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.351530), count: 20, class_loss = 171.294235, iou_loss = 1.271689, total_loss = 172.565933 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.303745), count: 30, class_loss = 850.856445, iou_loss = 2.271075, total_loss = 853.127563 
+ total_bbox = 11115, rewritten_bbox = 3.400810 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.440491), count: 22, class_loss = 171.329086, iou_loss = 1.204317, total_loss = 172.533401 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.281856), count: 81, class_loss = 851.310669, iou_loss = 8.738645, total_loss = 860.049316 
+ total_bbox = 11218, rewritten_bbox = 3.387413 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.362054), count: 21, class_loss = 171.222809, iou_loss = 1.094908, total_loss = 172.317719 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.238702), count: 55, class_loss = 852.572754, iou_loss = 4.449673, total_loss = 857.022461 
+ total_bbox = 11294, rewritten_bbox = 3.391181 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000052 seconds
+
+ 28: 514.602722, 549.786072 avg loss, 0.000000 rate, 0.489906 seconds, 3612 images, 9.868534 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.395762), count: 30, class_loss = 172.085007, iou_loss = 1.817110, total_loss = 173.902115 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.298214), count: 66, class_loss = 850.293762, iou_loss = 4.806323, total_loss = 855.100098 
+ total_bbox = 11390, rewritten_bbox = 3.380158 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.370435), count: 32, class_loss = 172.086227, iou_loss = 1.980344, total_loss = 174.066559 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.261128), count: 152, class_loss = 854.980835, iou_loss = 12.046148, total_loss = 867.026978 
+ total_bbox = 11574, rewritten_bbox = 3.386902 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.351706), count: 47, class_loss = 171.446426, iou_loss = 3.479856, total_loss = 174.926285 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.284310), count: 73, class_loss = 849.769165, iou_loss = 6.488917, total_loss = 856.258057 
+ total_bbox = 11694, rewritten_bbox = 3.352146 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000047 seconds
+
+ 29: 516.880005, 546.495483 avg loss, 0.000000 rate, 0.464969 seconds, 3741 images, 9.837861 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.342739), count: 26, class_loss = 171.365753, iou_loss = 1.871877, total_loss = 173.237640 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.242193), count: 87, class_loss = 851.672058, iou_loss = 8.506086, total_loss = 860.178162 
+ total_bbox = 11807, rewritten_bbox = 3.370882 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.371610), count: 19, class_loss = 171.276642, iou_loss = 0.923487, total_loss = 172.200119 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.258895), count: 55, class_loss = 849.723633, iou_loss = 5.203216, total_loss = 854.926880 
+ total_bbox = 11881, rewritten_bbox = 3.358303 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.332838), count: 23, class_loss = 171.151917, iou_loss = 1.484738, total_loss = 172.636658 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.293147), count: 117, class_loss = 851.634094, iou_loss = 8.369913, total_loss = 860.003967 
+ total_bbox = 12021, rewritten_bbox = 3.369104 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000045 seconds
+
+ 30: 515.530579, 543.398987 avg loss, 0.000000 rate, 0.491696 seconds, 3870 images, 9.804032 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.375105), count: 24, class_loss = 80.944679, iou_loss = 1.302320, total_loss = 82.247002 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.231447), count: 215, class_loss = 407.483795, iou_loss = 23.545149, total_loss = 431.028931 
+ total_bbox = 12260, rewritten_bbox = 3.482871 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.410306), count: 33, class_loss = 82.075005, iou_loss = 1.686370, total_loss = 83.761375 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.276696), count: 163, class_loss = 405.263794, iou_loss = 15.489871, total_loss = 420.753693 
+ total_bbox = 12456, rewritten_bbox = 3.572576 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.330368), count: 21, class_loss = 80.910896, iou_loss = 1.427683, total_loss = 82.338585 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.247073), count: 105, class_loss = 404.735687, iou_loss = 10.427552, total_loss = 415.163239 
+ total_bbox = 12582, rewritten_bbox = 3.600382 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 352 x 352 
+ try to allocate additional workspace_size = 255.93 MB 
+ CUDA allocate done! 
+Loaded: 0.048853 seconds
+
+ 31: 252.548813, 514.313965 avg loss, 0.000000 rate, 0.236798 seconds, 3999 images, 9.774248 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.356736), count: 21, class_loss = 81.494804, iou_loss = 1.390511, total_loss = 82.885315 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.212689), count: 49, class_loss = 402.675598, iou_loss = 6.523438, total_loss = 409.199036 
+ total_bbox = 12652, rewritten_bbox = 3.619981 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.315250), count: 15, class_loss = 81.293442, iou_loss = 0.908192, total_loss = 82.201637 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.384769), count: 11, class_loss = 401.359650, iou_loss = 0.632358, total_loss = 401.992004 
+ total_bbox = 12678, rewritten_bbox = 3.612557 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.240458), count: 9, class_loss = 81.247147, iou_loss = 1.116376, total_loss = 82.363525 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.265146), count: 34, class_loss = 402.619507, iou_loss = 2.549237, total_loss = 405.168732 
+ total_bbox = 12721, rewritten_bbox = 3.600346 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.056800 seconds
+
+ 32: 243.968369, 487.279419 avg loss, 0.000000 rate, 0.248898 seconds, 4128 images, 9.716156 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.401693), count: 21, class_loss = 82.065948, iou_loss = 0.821709, total_loss = 82.887657 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.220366), count: 80, class_loss = 403.611633, iou_loss = 7.873047, total_loss = 411.484680 
+ total_bbox = 12822, rewritten_bbox = 3.649976 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.376030), count: 29, class_loss = 81.510231, iou_loss = 1.447873, total_loss = 82.958107 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.244775), count: 175, class_loss = 406.872559, iou_loss = 20.025572, total_loss = 426.898132 
+ total_bbox = 13026, rewritten_bbox = 3.700292 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.339471), count: 24, class_loss = 81.728615, iou_loss = 1.393214, total_loss = 83.121826 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.270266), count: 68, class_loss = 403.486542, iou_loss = 6.399346, total_loss = 409.885895 
+ total_bbox = 13118, rewritten_bbox = 3.697210 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.096235 seconds
+
+ 33: 249.539383, 463.505402 avg loss, 0.000000 rate, 0.244994 seconds, 4257 images, 9.661427 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.363372), count: 16, class_loss = 81.145882, iou_loss = 1.115189, total_loss = 82.261070 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.207329), count: 87, class_loss = 404.522156, iou_loss = 10.265079, total_loss = 414.787231 
+ total_bbox = 13221, rewritten_bbox = 3.691097 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.353069), count: 27, class_loss = 81.678589, iou_loss = 1.698759, total_loss = 83.377342 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.244921), count: 39, class_loss = 402.497742, iou_loss = 4.279842, total_loss = 406.777557 
+ total_bbox = 13287, rewritten_bbox = 3.672763 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.311508), count: 15, class_loss = 80.907768, iou_loss = 1.102119, total_loss = 82.009888 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.235511), count: 115, class_loss = 404.230560, iou_loss = 15.054960, total_loss = 419.285522 
+ total_bbox = 13417, rewritten_bbox = 3.726615 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.103889 seconds - performance bottleneck on CPU or Disk HDD/SSD
+
+ 34: 248.083115, 441.963165 avg loss, 0.000000 rate, 0.250677 seconds, 4386 images, 9.612176 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.370848), count: 24, class_loss = 81.250534, iou_loss = 1.467649, total_loss = 82.718185 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.282702), count: 54, class_loss = 402.715027, iou_loss = 4.628906, total_loss = 407.343933 
+ total_bbox = 13495, rewritten_bbox = 3.712486 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.365946), count: 23, class_loss = 81.095551, iou_loss = 1.282999, total_loss = 82.378548 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.226156), count: 54, class_loss = 402.269562, iou_loss = 6.101154, total_loss = 408.370728 
+ total_bbox = 13572, rewritten_bbox = 3.713528 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.379649), count: 18, class_loss = 81.289818, iou_loss = 0.912757, total_loss = 82.202576 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.191427), count: 215, class_loss = 405.934631, iou_loss = 35.128590, total_loss = 441.063232 
+ total_bbox = 13805, rewritten_bbox = 3.984064 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.088357 seconds
+
+ 35: 250.679535, 422.834808 avg loss, 0.000000 rate, 0.252075 seconds, 4515 images, 9.565268 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.360471), count: 14, class_loss = 80.842987, iou_loss = 0.883301, total_loss = 81.726288 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225624), count: 42, class_loss = 402.434631, iou_loss = 5.644258, total_loss = 408.078888 
+ total_bbox = 13861, rewritten_bbox = 4.004040 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.333590), count: 16, class_loss = 80.926239, iou_loss = 0.977340, total_loss = 81.903580 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.233973), count: 195, class_loss = 406.251740, iou_loss = 20.672556, total_loss = 426.924286 
+ total_bbox = 14072, rewritten_bbox = 4.079022 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.368723), count: 24, class_loss = 81.506783, iou_loss = 1.851551, total_loss = 83.358337 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262545), count: 131, class_loss = 404.414429, iou_loss = 12.042378, total_loss = 416.456818 
+ total_bbox = 14227, rewritten_bbox = 4.083785 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.086604 seconds
+
+ 36: 249.741348, 405.525452 avg loss, 0.000000 rate, 0.265963 seconds, 4644 images, 9.516866 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.354185), count: 20, class_loss = 81.987785, iou_loss = 1.002504, total_loss = 82.990288 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.216408), count: 89, class_loss = 402.511353, iou_loss = 10.346839, total_loss = 412.858185 
+ total_bbox = 14336, rewritten_bbox = 4.143415 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.458749), count: 27, class_loss = 80.927803, iou_loss = 1.131331, total_loss = 82.059135 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.287921), count: 74, class_loss = 402.699158, iou_loss = 5.905887, total_loss = 408.605072 
+ total_bbox = 14437, rewritten_bbox = 4.121355 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.365172), count: 17, class_loss = 81.523224, iou_loss = 0.883068, total_loss = 82.406296 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.279433), count: 40, class_loss = 402.092712, iou_loss = 3.850472, total_loss = 405.943176 
+ total_bbox = 14494, rewritten_bbox = 4.105147 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.064053 seconds
+
+ 37: 245.810364, 389.553955 avg loss, 0.000000 rate, 0.251487 seconds, 4773 images, 9.470631 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.423959), count: 26, class_loss = 82.030312, iou_loss = 1.350705, total_loss = 83.381020 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.241319), count: 256, class_loss = 408.506073, iou_loss = 25.255451, total_loss = 433.761536 
+ total_bbox = 14776, rewritten_bbox = 4.148619 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.309164), count: 27, class_loss = 81.957314, iou_loss = 1.954794, total_loss = 83.912109 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.253546), count: 81, class_loss = 404.136627, iou_loss = 10.343796, total_loss = 414.480408 
+ total_bbox = 14884, rewritten_bbox = 4.212577 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.338047), count: 15, class_loss = 81.269493, iou_loss = 0.924481, total_loss = 82.193977 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.238963), count: 80, class_loss = 402.993774, iou_loss = 8.758312, total_loss = 411.752075 
+ total_bbox = 14979, rewritten_bbox = 4.225916 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.067229 seconds
+
+ 38: 251.580185, 375.756592 avg loss, 0.000000 rate, 0.251067 seconds, 4902 images, 9.419719 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.386611), count: 27, class_loss = 80.668457, iou_loss = 1.395746, total_loss = 82.064201 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.228052), count: 216, class_loss = 406.687439, iou_loss = 18.739870, total_loss = 425.427338 
+ total_bbox = 15222, rewritten_bbox = 4.224149 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.427653), count: 20, class_loss = 81.061569, iou_loss = 0.757392, total_loss = 81.818962 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.218254), count: 62, class_loss = 401.283844, iou_loss = 15.374364, total_loss = 416.658203 
+ total_bbox = 15304, rewritten_bbox = 4.234187 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.322439), count: 15, class_loss = 80.469284, iou_loss = 1.236578, total_loss = 81.705864 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.335524), count: 16, class_loss = 401.507355, iou_loss = 0.887309, total_loss = 402.394653 
+ total_bbox = 15335, rewritten_bbox = 4.232149 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.074043 seconds
+
+ 39: 248.344864, 363.015411 avg loss, 0.000000 rate, 0.249337 seconds, 5031 images, 9.369698 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.363574), count: 19, class_loss = 80.700279, iou_loss = 0.910151, total_loss = 81.610428 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.293510), count: 31, class_loss = 401.243286, iou_loss = 2.921602, total_loss = 404.164886 
+ total_bbox = 15385, rewritten_bbox = 4.218395 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.330204), count: 19, class_loss = 81.061234, iou_loss = 1.045830, total_loss = 82.107063 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.283442), count: 149, class_loss = 405.952820, iou_loss = 15.052189, total_loss = 421.005005 
+ total_bbox = 15553, rewritten_bbox = 4.237124 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.378627), count: 20, class_loss = 81.369987, iou_loss = 1.185524, total_loss = 82.555511 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.231610), count: 46, class_loss = 401.837616, iou_loss = 5.457940, total_loss = 407.295563 
+ total_bbox = 15619, rewritten_bbox = 4.232025 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.080572 seconds
+
+ 40: 246.456390, 351.359497 avg loss, 0.000000 rate, 0.250184 seconds, 5160 images, 9.320881 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.293777), count: 52, class_loss = 217.690201, iou_loss = 6.029978, total_loss = 223.720184 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239630), count: 160, class_loss = 1077.921997, iou_loss = 34.714844, total_loss = 1112.636841 
+ total_bbox = 15831, rewritten_bbox = 4.320637 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.416430), count: 41, class_loss = 218.008179, iou_loss = 2.380700, total_loss = 220.388870 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.202671), count: 64, class_loss = 1075.247192, iou_loss = 13.680868, total_loss = 1088.928101 
+ total_bbox = 15936, rewritten_bbox = 4.304719 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.355019), count: 19, class_loss = 215.595978, iou_loss = 1.831395, total_loss = 217.427368 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.191707), count: 87, class_loss = 1074.947876, iou_loss = 9.581486, total_loss = 1084.529297 
+ total_bbox = 16042, rewritten_bbox = 4.326144 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 576 x 576 
+ try to allocate additional workspace_size = 684.98 MB 
+ CUDA allocate done! 
+Loaded: 0.000029 seconds
+
+ 41: 657.938477, 382.017395 avg loss, 0.000000 rate, 0.614437 seconds, 5289 images, 9.273576 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.440906), count: 28, class_loss = 217.992554, iou_loss = 1.906318, total_loss = 219.898865 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.228974), count: 93, class_loss = 1076.925171, iou_loss = 8.488735, total_loss = 1085.413818 
+ total_bbox = 16163, rewritten_bbox = 4.324692 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.391236), count: 23, class_loss = 216.532791, iou_loss = 1.252589, total_loss = 217.785385 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.306098), count: 29, class_loss = 1071.446533, iou_loss = 3.734102, total_loss = 1075.180664 
+ total_bbox = 16215, rewritten_bbox = 4.323158 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.403757), count: 32, class_loss = 217.729767, iou_loss = 1.613531, total_loss = 219.343292 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.299451), count: 59, class_loss = 1077.145020, iou_loss = 4.481014, total_loss = 1081.626099 
+ total_bbox = 16306, rewritten_bbox = 4.305164 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000054 seconds
+
+ 42: 649.874695, 408.803131 avg loss, 0.000000 rate, 0.594942 seconds, 5418 images, 9.266178 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.406984), count: 51, class_loss = 217.865829, iou_loss = 2.732376, total_loss = 220.598206 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.280368), count: 162, class_loss = 1078.004517, iou_loss = 20.757994, total_loss = 1098.762573 
+ total_bbox = 16519, rewritten_bbox = 4.346510 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.402298), count: 38, class_loss = 218.125839, iou_loss = 2.058685, total_loss = 220.184525 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.284467), count: 137, class_loss = 1079.237427, iou_loss = 11.228925, total_loss = 1090.466309 
+ total_bbox = 16694, rewritten_bbox = 4.336887 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.372720), count: 27, class_loss = 216.299713, iou_loss = 1.487009, total_loss = 217.786728 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.254266), count: 32, class_loss = 1073.008667, iou_loss = 3.382994, total_loss = 1076.391724 
+ total_bbox = 16753, rewritten_bbox = 4.321614 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000037 seconds
+
+ 43: 654.031677, 433.325989 avg loss, 0.000000 rate, 0.591850 seconds, 5547 images, 9.256132 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.365127), count: 35, class_loss = 217.835983, iou_loss = 2.707554, total_loss = 220.543533 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.277482), count: 175, class_loss = 1079.531006, iou_loss = 16.255814, total_loss = 1095.786743 
+ total_bbox = 16963, rewritten_bbox = 4.291694 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.320642), count: 34, class_loss = 217.420822, iou_loss = 2.543423, total_loss = 219.964249 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.288370), count: 88, class_loss = 1075.687500, iou_loss = 8.507176, total_loss = 1084.194702 
+ total_bbox = 17085, rewritten_bbox = 4.290313 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.358961), count: 22, class_loss = 216.304504, iou_loss = 1.236601, total_loss = 217.541107 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.294362), count: 114, class_loss = 1075.085083, iou_loss = 10.360647, total_loss = 1085.445801 
+ total_bbox = 17221, rewritten_bbox = 4.268045 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000037 seconds
+
+ 44: 653.912659, 455.384644 avg loss, 0.000000 rate, 0.601758 seconds, 5676 images, 9.245756 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.381838), count: 33, class_loss = 216.676468, iou_loss = 1.845794, total_loss = 218.522263 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.291096), count: 133, class_loss = 1074.292236, iou_loss = 11.138989, total_loss = 1085.431274 
+ total_bbox = 17387, rewritten_bbox = 4.238799 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.375228), count: 31, class_loss = 215.869690, iou_loss = 1.768350, total_loss = 217.638031 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.252459), count: 97, class_loss = 1072.140747, iou_loss = 9.270349, total_loss = 1081.411011 
+ total_bbox = 17515, rewritten_bbox = 4.236369 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.311652), count: 23, class_loss = 216.237732, iou_loss = 2.024550, total_loss = 218.262283 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.269420), count: 40, class_loss = 1070.899414, iou_loss = 3.657522, total_loss = 1074.557007 
+ total_bbox = 17578, rewritten_bbox = 4.221186 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000037 seconds
+
+ 45: 649.303650, 474.776550 avg loss, 0.000000 rate, 0.592848 seconds, 5805 images, 9.236857 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.419848), count: 23, class_loss = 215.221207, iou_loss = 1.083303, total_loss = 216.304504 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.364549), count: 30, class_loss = 1070.516846, iou_loss = 1.844023, total_loss = 1072.360840 
+ total_bbox = 17631, rewritten_bbox = 4.208497 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.351669), count: 63, class_loss = 217.993576, iou_loss = 4.788336, total_loss = 222.781906 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.298379), count: 88, class_loss = 1073.849976, iou_loss = 8.220113, total_loss = 1082.070068 
+ total_bbox = 17782, rewritten_bbox = 4.195254 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.380680), count: 23, class_loss = 215.265244, iou_loss = 1.284702, total_loss = 216.549942 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239396), count: 22, class_loss = 1072.410278, iou_loss = 2.328488, total_loss = 1074.738770 
+ total_bbox = 17827, rewritten_bbox = 4.184664 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000053 seconds
+
+ 46: 647.467651, 492.045654 avg loss, 0.000000 rate, 0.572618 seconds, 5934 images, 9.226841 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.415121), count: 25, class_loss = 216.975250, iou_loss = 1.279887, total_loss = 218.255127 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.267089), count: 49, class_loss = 1070.520020, iou_loss = 4.799237, total_loss = 1075.319214 
+ total_bbox = 17901, rewritten_bbox = 4.178537 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.361228), count: 30, class_loss = 216.404099, iou_loss = 1.943541, total_loss = 218.347626 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.220419), count: 124, class_loss = 1073.167603, iou_loss = 16.405342, total_loss = 1089.572998 
+ total_bbox = 18055, rewritten_bbox = 4.181667 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.408110), count: 27, class_loss = 216.224380, iou_loss = 1.440021, total_loss = 217.664398 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239237), count: 114, class_loss = 1073.327393, iou_loss = 12.667242, total_loss = 1085.994629 
+ total_bbox = 18196, rewritten_bbox = 4.154759 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000042 seconds
+
+ 47: 650.859009, 507.927002 avg loss, 0.000000 rate, 0.589127 seconds, 6063 images, 9.214096 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.357845), count: 40, class_loss = 217.126022, iou_loss = 3.753248, total_loss = 220.879272 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.275995), count: 142, class_loss = 1074.546021, iou_loss = 13.615461, total_loss = 1088.161499 
+ total_bbox = 18378, rewritten_bbox = 4.135379 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.330475), count: 27, class_loss = 214.629501, iou_loss = 2.206259, total_loss = 216.835754 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239805), count: 92, class_loss = 1070.456787, iou_loss = 12.004451, total_loss = 1082.461182 
+ total_bbox = 18497, rewritten_bbox = 4.108774 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.360662), count: 64, class_loss = 216.817230, iou_loss = 4.445403, total_loss = 221.262619 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.275600), count: 146, class_loss = 1075.470947, iou_loss = 13.517624, total_loss = 1088.988525 
+ total_bbox = 18707, rewritten_bbox = 4.078687 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000034 seconds
+
+ 48: 653.098145, 522.444092 avg loss, 0.000000 rate, 0.595139 seconds, 6192 images, 9.203771 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.341788), count: 32, class_loss = 216.177139, iou_loss = 2.058299, total_loss = 218.235443 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.265010), count: 71, class_loss = 1068.726074, iou_loss = 6.501908, total_loss = 1075.228027 
+ total_bbox = 18810, rewritten_bbox = 4.066986 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.331994), count: 71, class_loss = 216.700714, iou_loss = 6.084666, total_loss = 222.785385 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.260627), count: 139, class_loss = 1073.892578, iou_loss = 12.127726, total_loss = 1086.020264 
+ total_bbox = 19020, rewritten_bbox = 4.032597 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.436282), count: 36, class_loss = 216.682327, iou_loss = 1.579692, total_loss = 218.262009 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.267825), count: 41, class_loss = 1070.559204, iou_loss = 4.472929, total_loss = 1075.032104 
+ total_bbox = 19097, rewritten_bbox = 4.021574 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000037 seconds
+
+ 49: 649.260559, 535.125732 avg loss, 0.000000 rate, 0.589624 seconds, 6321 images, 9.194370 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.426570), count: 26, class_loss = 215.969742, iou_loss = 1.370867, total_loss = 217.340622 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.280343), count: 44, class_loss = 1069.134766, iou_loss = 3.038608, total_loss = 1072.173340 
+ total_bbox = 19167, rewritten_bbox = 4.017322 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.335179), count: 30, class_loss = 214.940765, iou_loss = 2.669513, total_loss = 217.610275 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.281736), count: 46, class_loss = 1070.806152, iou_loss = 4.464571, total_loss = 1075.270752 
+ total_bbox = 19243, rewritten_bbox = 4.017045 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.357187), count: 29, class_loss = 215.508224, iou_loss = 2.305119, total_loss = 217.813339 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.308966), count: 27, class_loss = 1068.078247, iou_loss = 2.188772, total_loss = 1070.267090 
+ total_bbox = 19299, rewritten_bbox = 4.005389 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000035 seconds
+
+ 50: 645.079224, 546.121094 avg loss, 0.000000 rate, 0.580322 seconds, 6450 images, 9.184298 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.318323), count: 23, class_loss = 96.463150, iou_loss = 1.637514, total_loss = 98.100662 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.208610), count: 81, class_loss = 475.573853, iou_loss = 10.722566, total_loss = 486.296417 
+ total_bbox = 19403, rewritten_bbox = 4.040612 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.340630), count: 33, class_loss = 96.652458, iou_loss = 2.188658, total_loss = 98.841118 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.203270), count: 266, class_loss = 480.693268, iou_loss = 33.209076, total_loss = 513.902344 
+ total_bbox = 19702, rewritten_bbox = 4.172165 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.311182), count: 28, class_loss = 96.471626, iou_loss = 2.067246, total_loss = 98.538872 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.293539), count: 59, class_loss = 475.848236, iou_loss = 4.256631, total_loss = 480.104889 
+ total_bbox = 19789, rewritten_bbox = 4.158876 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 384 x 384 
+ try to allocate additional workspace_size = 304.54 MB 
+ CUDA allocate done! 
+Loaded: 0.006613 seconds
+
+ 51: 295.964050, 521.105408 avg loss, 0.000000 rate, 0.315146 seconds, 6579 images, 9.173033 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.364135), count: 28, class_loss = 96.249786, iou_loss = 1.789290, total_loss = 98.039070 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.206111), count: 155, class_loss = 475.848663, iou_loss = 20.355469, total_loss = 496.204132 
+ total_bbox = 19972, rewritten_bbox = 4.215902 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.309370), count: 33, class_loss = 96.618004, iou_loss = 2.765750, total_loss = 99.383751 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.217732), count: 124, class_loss = 476.500214, iou_loss = 14.446675, total_loss = 490.946899 
+ total_bbox = 20128, rewritten_bbox = 4.227941 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.303978), count: 29, class_loss = 96.498138, iou_loss = 2.081600, total_loss = 98.579735 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.256191), count: 88, class_loss = 475.448730, iou_loss = 11.734602, total_loss = 487.183319 
+ total_bbox = 20245, rewritten_bbox = 4.243023 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000100 seconds
+
+ 52: 295.056152, 498.500488 avg loss, 0.000000 rate, 0.297086 seconds, 6708 images, 9.126010 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.405536), count: 23, class_loss = 96.079987, iou_loss = 1.197277, total_loss = 97.277267 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.224858), count: 42, class_loss = 473.774841, iou_loss = 4.121230, total_loss = 477.896088 
+ total_bbox = 20310, rewritten_bbox = 4.239291 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.309941), count: 26, class_loss = 95.997581, iou_loss = 1.834495, total_loss = 97.832077 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.238520), count: 74, class_loss = 475.066040, iou_loss = 12.529570, total_loss = 487.595612 
+ total_bbox = 20410, rewritten_bbox = 4.233219 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.378812), count: 16, class_loss = 95.289902, iou_loss = 0.834155, total_loss = 96.124054 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.200691), count: 83, class_loss = 475.380768, iou_loss = 10.308684, total_loss = 485.689453 
+ total_bbox = 20509, rewritten_bbox = 4.266419 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000068 seconds
+
+ 53: 290.402435, 477.690674 avg loss, 0.000000 rate, 0.301122 seconds, 6837 images, 9.076051 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.291034), count: 30, class_loss = 96.399994, iou_loss = 3.338606, total_loss = 99.738602 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.214780), count: 103, class_loss = 474.888031, iou_loss = 11.820722, total_loss = 486.708740 
+ total_bbox = 20642, rewritten_bbox = 4.267997 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.339735), count: 26, class_loss = 96.317848, iou_loss = 1.460370, total_loss = 97.778221 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.241118), count: 101, class_loss = 475.360382, iou_loss = 10.602653, total_loss = 485.963013 
+ total_bbox = 20769, rewritten_bbox = 4.270788 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.371149), count: 28, class_loss = 96.635345, iou_loss = 1.714026, total_loss = 98.349373 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.228106), count: 80, class_loss = 474.320343, iou_loss = 7.436365, total_loss = 481.756714 
+ total_bbox = 20877, rewritten_bbox = 4.301384 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.001105 seconds
+
+ 54: 291.715790, 459.093201 avg loss, 0.000000 rate, 0.292238 seconds, 6966 images, 9.027128 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.382463), count: 23, class_loss = 96.661392, iou_loss = 1.331759, total_loss = 97.993149 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.183862), count: 98, class_loss = 472.990814, iou_loss = 9.991870, total_loss = 482.982697 
+ total_bbox = 20998, rewritten_bbox = 4.305172 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.298382), count: 19, class_loss = 96.249603, iou_loss = 1.370424, total_loss = 97.620026 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.215286), count: 34, class_loss = 472.715668, iou_loss = 5.170240, total_loss = 477.885895 
+ total_bbox = 21051, rewritten_bbox = 4.299083 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.390460), count: 20, class_loss = 95.306671, iou_loss = 1.201660, total_loss = 96.508331 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.248925), count: 100, class_loss = 474.062866, iou_loss = 10.076262, total_loss = 484.139130 
+ total_bbox = 21171, rewritten_bbox = 4.303056 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.006736 seconds
+
+ 55: 289.521515, 442.136047 avg loss, 0.000000 rate, 0.288176 seconds, 7095 images, 8.977596 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.415996), count: 22, class_loss = 95.886421, iou_loss = 1.306788, total_loss = 97.193214 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.244068), count: 29, class_loss = 472.284973, iou_loss = 3.447038, total_loss = 475.732025 
+ total_bbox = 21222, rewritten_bbox = 4.297427 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.331966), count: 23, class_loss = 96.071846, iou_loss = 2.110862, total_loss = 98.182709 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.256991), count: 86, class_loss = 472.865692, iou_loss = 8.140534, total_loss = 481.006226 
+ total_bbox = 21331, rewritten_bbox = 4.294219 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.385153), count: 21, class_loss = 96.500496, iou_loss = 0.950615, total_loss = 97.451118 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.224932), count: 303, class_loss = 479.444305, iou_loss = 42.070450, total_loss = 521.514771 
+ total_bbox = 21655, rewritten_bbox = 4.313092 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.020946 seconds
+
+ 56: 295.180023, 427.440430 avg loss, 0.000000 rate, 0.291980 seconds, 7224 images, 8.928780 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.399267), count: 27, class_loss = 95.103882, iou_loss = 1.599342, total_loss = 96.703224 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262217), count: 54, class_loss = 471.384003, iou_loss = 6.272075, total_loss = 477.656067 
+ total_bbox = 21736, rewritten_bbox = 4.301620 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.355679), count: 23, class_loss = 95.684525, iou_loss = 1.102369, total_loss = 96.786896 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.267529), count: 155, class_loss = 475.166138, iou_loss = 13.143759, total_loss = 488.309906 
+ total_bbox = 21914, rewritten_bbox = 4.321438 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.338531), count: 28, class_loss = 95.672173, iou_loss = 2.537427, total_loss = 98.209595 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.261328), count: 81, class_loss = 473.336212, iou_loss = 7.459302, total_loss = 480.795502 
+ total_bbox = 22023, rewritten_bbox = 4.331835 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000093 seconds
+
+ 57: 289.743530, 413.670746 avg loss, 0.000000 rate, 0.312452 seconds, 7353 images, 8.882968 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.351356), count: 26, class_loss = 95.543137, iou_loss = 2.223599, total_loss = 97.766739 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225625), count: 92, class_loss = 472.429230, iou_loss = 13.024346, total_loss = 485.453583 
+ total_bbox = 22141, rewritten_bbox = 4.335847 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.347070), count: 20, class_loss = 95.578194, iou_loss = 1.291731, total_loss = 96.869926 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.248505), count: 77, class_loss = 471.315460, iou_loss = 6.638490, total_loss = 477.953949 
+ total_bbox = 22238, rewritten_bbox = 4.361903 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.361974), count: 23, class_loss = 95.292175, iou_loss = 1.284782, total_loss = 96.576958 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225663), count: 61, class_loss = 472.174652, iou_loss = 10.294649, total_loss = 482.469299 
+ total_bbox = 22322, rewritten_bbox = 4.354448 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000092 seconds
+
+ 58: 289.515076, 401.255188 avg loss, 0.000000 rate, 0.292671 seconds, 7482 images, 8.837545 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.363245), count: 22, class_loss = 95.596939, iou_loss = 1.105094, total_loss = 96.702034 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.218447), count: 36, class_loss = 470.772858, iou_loss = 3.534248, total_loss = 474.307098 
+ total_bbox = 22380, rewritten_bbox = 4.343163 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.351513), count: 23, class_loss = 95.425636, iou_loss = 1.734250, total_loss = 97.159882 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.218922), count: 101, class_loss = 471.660980, iou_loss = 10.370276, total_loss = 482.031250 
+ total_bbox = 22504, rewritten_bbox = 4.328119 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.345104), count: 28, class_loss = 95.439018, iou_loss = 1.710972, total_loss = 97.149994 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.190965), count: 147, class_loss = 473.540161, iou_loss = 16.612328, total_loss = 490.152466 
+ total_bbox = 22679, rewritten_bbox = 4.369681 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.095295 seconds
+
+ 59: 289.583801, 390.088043 avg loss, 0.000000 rate, 0.280362 seconds, 7611 images, 8.789825 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.340552), count: 26, class_loss = 94.859116, iou_loss = 1.504321, total_loss = 96.363441 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.190735), count: 107, class_loss = 471.433197, iou_loss = 13.827126, total_loss = 485.260315 
+ total_bbox = 22812, rewritten_bbox = 4.370507 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.297187), count: 20, class_loss = 95.819298, iou_loss = 1.446687, total_loss = 97.265991 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.250880), count: 160, class_loss = 474.211212, iou_loss = 16.167877, total_loss = 490.379089 
+ total_bbox = 22992, rewritten_bbox = 4.358037 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.315019), count: 22, class_loss = 95.684822, iou_loss = 1.462652, total_loss = 97.147469 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.287405), count: 167, class_loss = 474.559326, iou_loss = 14.300100, total_loss = 488.859406 
+ total_bbox = 23181, rewritten_bbox = 4.352703 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.105024 seconds - performance bottleneck on CPU or Disk HDD/SSD
+
+ 60: 292.545959, 380.333832 avg loss, 0.000000 rate, 0.312368 seconds, 7740 images, 8.754081 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.375309), count: 21, class_loss = 112.271324, iou_loss = 1.061444, total_loss = 113.332771 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.186936), count: 97, class_loss = 552.349426, iou_loss = 10.274891, total_loss = 562.624329 
+ total_bbox = 23299, rewritten_bbox = 4.360702 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.347511), count: 21, class_loss = 111.549622, iou_loss = 1.172148, total_loss = 112.721771 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.213288), count: 342, class_loss = 559.223206, iou_loss = 42.547874, total_loss = 601.771057 
+ total_bbox = 23662, rewritten_bbox = 4.433269 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.350373), count: 22, class_loss = 111.841125, iou_loss = 1.363179, total_loss = 113.204308 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.217014), count: 90, class_loss = 551.090820, iou_loss = 13.122910, total_loss = 564.213684 
+ total_bbox = 23773, rewritten_bbox = 4.429395 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 416 x 416 
+ try to allocate additional workspace_size = 357.38 MB 
+ CUDA allocate done! 
+Loaded: 0.000037 seconds
+
+ 61: 344.644653, 376.764923 avg loss, 0.000000 rate, 0.337891 seconds, 7869 images, 8.724491 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.338891), count: 22, class_loss = 111.695457, iou_loss = 1.521030, total_loss = 113.216492 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.218137), count: 142, class_loss = 551.556213, iou_loss = 19.157703, total_loss = 570.713867 
+ total_bbox = 23937, rewritten_bbox = 4.465889 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.396057), count: 24, class_loss = 112.691109, iou_loss = 1.259675, total_loss = 113.950783 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.263695), count: 118, class_loss = 552.040710, iou_loss = 11.173601, total_loss = 563.214294 
+ total_bbox = 24078, rewritten_bbox = 4.452197 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.386682), count: 34, class_loss = 111.553589, iou_loss = 2.087334, total_loss = 113.640923 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.276890), count: 111, class_loss = 552.623108, iou_loss = 8.798601, total_loss = 561.421753 
+ total_bbox = 24223, rewritten_bbox = 4.429674 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.005847 seconds
+
+ 62: 339.359680, 373.024414 avg loss, 0.000000 rate, 0.349587 seconds, 7998 images, 8.684169 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.386138), count: 23, class_loss = 111.263443, iou_loss = 1.250920, total_loss = 112.514366 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.233927), count: 85, class_loss = 548.966248, iou_loss = 8.533203, total_loss = 557.499451 
+ total_bbox = 24331, rewritten_bbox = 4.422342 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.350603), count: 24, class_loss = 111.218193, iou_loss = 1.307969, total_loss = 112.526161 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.228428), count: 213, class_loss = 552.552490, iou_loss = 26.957350, total_loss = 579.509827 
+ total_bbox = 24568, rewritten_bbox = 4.461088 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.354128), count: 22, class_loss = 111.988770, iou_loss = 1.568723, total_loss = 113.557495 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.297362), count: 44, class_loss = 547.526428, iou_loss = 3.719295, total_loss = 551.245728 
+ total_bbox = 24634, rewritten_bbox = 4.449135 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000040 seconds
+
+ 63: 337.808838, 369.502869 avg loss, 0.000000 rate, 0.334210 seconds, 8127 images, 8.646693 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.340181), count: 33, class_loss = 111.073738, iou_loss = 2.349632, total_loss = 113.423370 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.307325), count: 71, class_loss = 548.673523, iou_loss = 6.034611, total_loss = 554.708130 
+ total_bbox = 24738, rewritten_bbox = 4.442558 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.363592), count: 30, class_loss = 111.260925, iou_loss = 1.802314, total_loss = 113.063240 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.220093), count: 240, class_loss = 554.089050, iou_loss = 35.821495, total_loss = 589.910522 
+ total_bbox = 25008, rewritten_bbox = 4.482565 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.380914), count: 38, class_loss = 110.858650, iou_loss = 2.154910, total_loss = 113.013557 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.312265), count: 67, class_loss = 547.815186, iou_loss = 5.687455, total_loss = 553.502625 
+ total_bbox = 25113, rewritten_bbox = 4.463823 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000077 seconds
+
+ 64: 339.603546, 366.512939 avg loss, 0.000000 rate, 0.328199 seconds, 8256 images, 8.606638 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.348937), count: 11, class_loss = 111.423019, iou_loss = 0.735113, total_loss = 112.158134 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.228205), count: 33, class_loss = 546.358582, iou_loss = 3.266897, total_loss = 549.625488 
+ total_bbox = 25157, rewritten_bbox = 4.463966 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.354763), count: 26, class_loss = 111.083633, iou_loss = 1.529638, total_loss = 112.613266 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.229296), count: 71, class_loss = 547.589844, iou_loss = 11.397438, total_loss = 558.987305 
+ total_bbox = 25254, rewritten_bbox = 4.494338 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.393357), count: 16, class_loss = 110.895943, iou_loss = 1.098644, total_loss = 111.994583 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.235698), count: 69, class_loss = 546.741394, iou_loss = 8.218659, total_loss = 554.960022 
+ total_bbox = 25339, rewritten_bbox = 4.479261 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000046 seconds
+
+ 65: 333.389801, 363.200623 avg loss, 0.000000 rate, 0.327731 seconds, 8385 images, 8.566149 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.348581), count: 17, class_loss = 110.784386, iou_loss = 0.887502, total_loss = 111.671883 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.203952), count: 109, class_loss = 547.790222, iou_loss = 11.207940, total_loss = 558.998169 
+ total_bbox = 25465, rewritten_bbox = 4.527783 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.365781), count: 28, class_loss = 110.717674, iou_loss = 1.338118, total_loss = 112.055786 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.263720), count: 185, class_loss = 550.041809, iou_loss = 20.469069, total_loss = 570.510925 
+ total_bbox = 25678, rewritten_bbox = 4.548641 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.344313), count: 32, class_loss = 111.381813, iou_loss = 1.939612, total_loss = 113.321426 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.269849), count: 69, class_loss = 545.572937, iou_loss = 6.956305, total_loss = 552.529236 
+ total_bbox = 25779, rewritten_bbox = 4.542457 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000078 seconds
+
+ 66: 336.514557, 360.532013 avg loss, 0.000000 rate, 0.329135 seconds, 8514 images, 8.526003 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.295234), count: 29, class_loss = 110.374908, iou_loss = 2.134822, total_loss = 112.509727 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.232534), count: 120, class_loss = 547.012024, iou_loss = 15.126907, total_loss = 562.138916 
+ total_bbox = 25928, rewritten_bbox = 4.589633 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.380818), count: 31, class_loss = 111.370094, iou_loss = 1.664835, total_loss = 113.034927 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.269399), count: 49, class_loss = 544.298828, iou_loss = 3.874228, total_loss = 548.173035 
+ total_bbox = 26008, rewritten_bbox = 4.583205 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.398525), count: 21, class_loss = 110.927231, iou_loss = 1.093648, total_loss = 112.020882 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.213732), count: 52, class_loss = 545.118530, iou_loss = 8.085983, total_loss = 553.204529 
+ total_bbox = 26081, rewritten_bbox = 4.585714 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000044 seconds
+
+ 67: 333.513672, 357.830170 avg loss, 0.000000 rate, 0.340909 seconds, 8643 images, 8.486462 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.376180), count: 27, class_loss = 110.420799, iou_loss = 1.452762, total_loss = 111.873558 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.272433), count: 91, class_loss = 544.141418, iou_loss = 7.814044, total_loss = 551.955444 
+ total_bbox = 26199, rewritten_bbox = 4.595595 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.349914), count: 27, class_loss = 110.968216, iou_loss = 1.705953, total_loss = 112.674171 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262880), count: 181, class_loss = 547.942078, iou_loss = 20.312181, total_loss = 568.254272 
+ total_bbox = 26407, rewritten_bbox = 4.601053 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.327131), count: 30, class_loss = 111.163322, iou_loss = 2.404649, total_loss = 113.567970 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.281193), count: 212, class_loss = 549.202576, iou_loss = 19.215343, total_loss = 568.417908 
+ total_bbox = 26649, rewritten_bbox = 4.589291 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000045 seconds
+
+ 68: 337.790588, 355.826202 avg loss, 0.000000 rate, 0.357184 seconds, 8772 images, 8.448938 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.395817), count: 28, class_loss = 110.767921, iou_loss = 1.156772, total_loss = 111.924690 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243162), count: 120, class_loss = 544.226196, iou_loss = 20.770576, total_loss = 564.996765 
+ total_bbox = 26797, rewritten_bbox = 4.586334 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.397895), count: 19, class_loss = 110.553009, iou_loss = 1.285145, total_loss = 111.838150 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.319806), count: 13, class_loss = 540.973267, iou_loss = 1.362872, total_loss = 542.336121 
+ total_bbox = 26829, rewritten_bbox = 4.580864 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.377833), count: 21, class_loss = 109.827271, iou_loss = 1.156511, total_loss = 110.983788 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.277502), count: 126, class_loss = 545.416077, iou_loss = 12.324128, total_loss = 557.740234 
+ total_bbox = 26976, rewritten_bbox = 4.578144 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000099 seconds
+
+ 69: 333.303284, 353.573914 avg loss, 0.000000 rate, 0.332647 seconds, 8901 images, 8.414045 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.329199), count: 34, class_loss = 109.892807, iou_loss = 2.168571, total_loss = 112.061378 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.215428), count: 218, class_loss = 545.007385, iou_loss = 27.943951, total_loss = 572.951355 
+ total_bbox = 27228, rewritten_bbox = 4.620244 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.305580), count: 17, class_loss = 109.745888, iou_loss = 1.189907, total_loss = 110.935799 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.268613), count: 21, class_loss = 540.578003, iou_loss = 2.603288, total_loss = 543.181274 
+ total_bbox = 27266, rewritten_bbox = 4.613805 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.322223), count: 26, class_loss = 110.215866, iou_loss = 1.661780, total_loss = 111.877647 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.288794), count: 76, class_loss = 544.528687, iou_loss = 6.209711, total_loss = 550.738403 
+ total_bbox = 27368, rewritten_bbox = 4.600263 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000050 seconds
+
+ 70: 333.624298, 351.578949 avg loss, 0.000000 rate, 0.332895 seconds, 9030 images, 8.376104 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.355808), count: 23, class_loss = 78.983009, iou_loss = 1.449667, total_loss = 80.432671 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.227730), count: 205, class_loss = 390.588257, iou_loss = 22.060638, total_loss = 412.648895 
+ total_bbox = 27596, rewritten_bbox = 4.627482 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.385367), count: 20, class_loss = 78.795509, iou_loss = 1.284912, total_loss = 80.080421 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.361061), count: 15, class_loss = 385.565948, iou_loss = 1.001953, total_loss = 386.567902 
+ total_bbox = 27631, rewritten_bbox = 4.621621 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.474200), count: 14, class_loss = 78.445366, iou_loss = 0.479521, total_loss = 78.924881 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.212423), count: 42, class_loss = 386.101562, iou_loss = 5.042242, total_loss = 391.143799 
+ total_bbox = 27687, rewritten_bbox = 4.644779 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 352 x 352 
+ try to allocate additional workspace_size = 255.93 MB 
+ CUDA allocate done! 
+Loaded: 0.073525 seconds
+
+ 71: 238.299774, 340.251038 avg loss, 0.000000 rate, 0.244675 seconds, 9159 images, 8.338577 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.388088), count: 27, class_loss = 79.361732, iou_loss = 1.259169, total_loss = 80.620903 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.197491), count: 197, class_loss = 389.637543, iou_loss = 26.256767, total_loss = 415.894318 
+ total_bbox = 27911, rewritten_bbox = 4.722153 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.319285), count: 22, class_loss = 78.745987, iou_loss = 1.495373, total_loss = 80.241356 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.183370), count: 154, class_loss = 388.137085, iou_loss = 17.709620, total_loss = 405.846710 
+ total_bbox = 28087, rewritten_bbox = 4.760210 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.300287), count: 19, class_loss = 78.294640, iou_loss = 1.341053, total_loss = 79.635696 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.190382), count: 215, class_loss = 390.649078, iou_loss = 26.450581, total_loss = 417.099640 
+ total_bbox = 28321, rewritten_bbox = 4.780905 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.069558 seconds
+
+ 72: 246.556442, 330.881592 avg loss, 0.000000 rate, 0.251669 seconds, 9288 images, 8.299385 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.320785), count: 21, class_loss = 79.144211, iou_loss = 1.372422, total_loss = 80.516632 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225158), count: 63, class_loss = 385.274261, iou_loss = 5.414108, total_loss = 390.688354 
+ total_bbox = 28405, rewritten_bbox = 4.791410 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.253176), count: 22, class_loss = 78.515450, iou_loss = 1.934076, total_loss = 80.449524 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.214055), count: 65, class_loss = 384.750549, iou_loss = 6.199809, total_loss = 390.950348 
+ total_bbox = 28492, rewritten_bbox = 4.794328 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.368894), count: 17, class_loss = 78.388313, iou_loss = 0.836369, total_loss = 79.224686 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243469), count: 43, class_loss = 384.680511, iou_loss = 4.751453, total_loss = 389.431946 
+ total_bbox = 28552, rewritten_bbox = 4.784253 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.064023 seconds
+
+ 73: 235.210236, 321.314453 avg loss, 0.000000 rate, 0.276879 seconds, 9417 images, 8.260988 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.378486), count: 13, class_loss = 78.217216, iou_loss = 0.633369, total_loss = 78.850586 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.271532), count: 163, class_loss = 387.388367, iou_loss = 17.760128, total_loss = 405.148468 
+ total_bbox = 28728, rewritten_bbox = 4.789752 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.416425), count: 21, class_loss = 78.549301, iou_loss = 1.100200, total_loss = 79.649498 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.186344), count: 83, class_loss = 384.353729, iou_loss = 10.659339, total_loss = 395.013092 
+ total_bbox = 28832, rewritten_bbox = 4.817564 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.412627), count: 22, class_loss = 78.567719, iou_loss = 0.993283, total_loss = 79.560997 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225302), count: 97, class_loss = 385.360474, iou_loss = 7.926235, total_loss = 393.286713 
+ total_bbox = 28951, rewritten_bbox = 4.808124 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.046587 seconds
+
+ 74: 238.584915, 313.041504 avg loss, 0.000000 rate, 0.240103 seconds, 9546 images, 8.225703 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.334155), count: 22, class_loss = 78.572922, iou_loss = 1.083689, total_loss = 79.656616 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.220075), count: 185, class_loss = 386.408966, iou_loss = 21.334620, total_loss = 407.743591 
+ total_bbox = 29158, rewritten_bbox = 4.846011 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.390231), count: 16, class_loss = 78.426628, iou_loss = 0.824048, total_loss = 79.250679 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.211308), count: 115, class_loss = 384.408020, iou_loss = 15.208031, total_loss = 399.616058 
+ total_bbox = 29289, rewritten_bbox = 4.899450 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.347254), count: 19, class_loss = 78.183357, iou_loss = 1.169411, total_loss = 79.352768 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.280570), count: 28, class_loss = 382.430542, iou_loss = 2.246866, total_loss = 384.677429 
+ total_bbox = 29336, rewritten_bbox = 4.891601 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.058062 seconds
+
+ 75: 238.382843, 305.575623 avg loss, 0.000000 rate, 0.244373 seconds, 9675 images, 8.183299 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.351275), count: 20, class_loss = 77.740631, iou_loss = 1.250562, total_loss = 78.991196 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.213463), count: 139, class_loss = 384.199005, iou_loss = 19.381905, total_loss = 403.580902 
+ total_bbox = 29495, rewritten_bbox = 4.936430 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.373266), count: 19, class_loss = 77.995819, iou_loss = 1.121105, total_loss = 79.116928 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.218002), count: 37, class_loss = 380.990082, iou_loss = 3.470385, total_loss = 384.460480 
+ total_bbox = 29551, rewritten_bbox = 4.930459 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.438705), count: 21, class_loss = 77.838875, iou_loss = 0.575371, total_loss = 78.414246 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.204542), count: 71, class_loss = 382.980499, iou_loss = 8.515806, total_loss = 391.496307 
+ total_bbox = 29643, rewritten_bbox = 4.932024 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.043345 seconds
+
+ 76: 236.010025, 298.619049 avg loss, 0.000000 rate, 0.263492 seconds, 9804 images, 8.143445 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.334068), count: 23, class_loss = 77.836853, iou_loss = 1.650237, total_loss = 79.487091 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.198268), count: 102, class_loss = 382.624695, iou_loss = 14.847793, total_loss = 397.472473 
+ total_bbox = 29768, rewritten_bbox = 4.931470 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.333548), count: 15, class_loss = 78.562904, iou_loss = 0.818024, total_loss = 79.380928 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.270124), count: 63, class_loss = 380.909332, iou_loss = 5.919104, total_loss = 386.828430 
+ total_bbox = 29846, rewritten_bbox = 4.942036 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.263133), count: 23, class_loss = 77.530701, iou_loss = 1.739275, total_loss = 79.269974 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.267957), count: 102, class_loss = 382.782379, iou_loss = 9.493051, total_loss = 392.275421 
+ total_bbox = 29971, rewritten_bbox = 4.941443 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.034932 seconds
+
+ 77: 235.785736, 292.335724 avg loss, 0.000000 rate, 0.263403 seconds, 9933 images, 8.104633 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.352681), count: 23, class_loss = 77.891769, iou_loss = 1.192865, total_loss = 79.084641 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.242272), count: 91, class_loss = 380.507538, iou_loss = 9.125590, total_loss = 389.633118 
+ total_bbox = 30085, rewritten_bbox = 4.952634 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.367481), count: 20, class_loss = 77.326134, iou_loss = 1.150181, total_loss = 78.476311 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.331280), count: 104, class_loss = 382.113953, iou_loss = 6.710166, total_loss = 388.824127 
+ total_bbox = 30209, rewritten_bbox = 4.942236 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.331984), count: 17, class_loss = 77.517990, iou_loss = 1.233955, total_loss = 78.751938 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.226916), count: 49, class_loss = 379.268829, iou_loss = 5.237804, total_loss = 384.506622 
+ total_bbox = 30275, rewritten_bbox = 4.951280 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.021769 seconds
+
+ 78: 233.212784, 286.423431 avg loss, 0.000000 rate, 0.240849 seconds, 10062 images, 8.064996 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.416487), count: 21, class_loss = 77.613609, iou_loss = 0.676928, total_loss = 78.290535 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.253266), count: 37, class_loss = 377.756866, iou_loss = 3.626771, total_loss = 381.383636 
+ total_bbox = 30333, rewritten_bbox = 4.941813 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.334360), count: 25, class_loss = 77.822975, iou_loss = 1.944858, total_loss = 79.767830 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.337449), count: 32, class_loss = 378.264740, iou_loss = 2.871707, total_loss = 381.136444 
+ total_bbox = 30390, rewritten_bbox = 4.932544 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.453758), count: 18, class_loss = 77.300392, iou_loss = 0.811773, total_loss = 78.112160 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.222987), count: 243, class_loss = 382.628754, iou_loss = 21.986919, total_loss = 404.615692 
+ total_bbox = 30651, rewritten_bbox = 5.011256 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.067854 seconds
+
+ 79: 233.884384, 281.169525 avg loss, 0.000000 rate, 0.261174 seconds, 10191 images, 8.020805 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.320036), count: 17, class_loss = 77.442810, iou_loss = 1.432055, total_loss = 78.874863 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.227755), count: 19, class_loss = 376.122131, iou_loss = 1.893214, total_loss = 378.015350 
+ total_bbox = 30687, rewritten_bbox = 5.005377 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.326732), count: 20, class_loss = 77.613724, iou_loss = 1.080998, total_loss = 78.694725 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.265630), count: 68, class_loss = 376.955902, iou_loss = 6.440203, total_loss = 383.396118 
+ total_bbox = 30775, rewritten_bbox = 5.004062 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.371793), count: 24, class_loss = 77.696480, iou_loss = 1.364576, total_loss = 79.061050 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239879), count: 69, class_loss = 376.858337, iou_loss = 8.180368, total_loss = 385.038696 
+ total_bbox = 30867, rewritten_bbox = 5.018304 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.018101 seconds
+
+ 80: 230.513474, 276.103912 avg loss, 0.000000 rate, 0.259878 seconds, 10320 images, 7.986261 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.381930), count: 29, class_loss = 184.591232, iou_loss = 1.591751, total_loss = 186.182983 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.270506), count: 43, class_loss = 895.981934, iou_loss = 4.765352, total_loss = 900.747253 
+ total_bbox = 30939, rewritten_bbox = 5.009858 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.304819), count: 45, class_loss = 184.394485, iou_loss = 4.319643, total_loss = 188.714127 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.272098), count: 154, class_loss = 901.036865, iou_loss = 14.448583, total_loss = 915.485474 
+ total_bbox = 31138, rewritten_bbox = 4.997109 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.367390), count: 55, class_loss = 184.370621, iou_loss = 3.040402, total_loss = 187.411026 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.280021), count: 118, class_loss = 897.815247, iou_loss = 9.279070, total_loss = 907.094299 
+ total_bbox = 31311, rewritten_bbox = 4.972693 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 544 x 544 
+ try to allocate additional workspace_size = 611.00 MB 
+ CUDA allocate done! 
+Loaded: 0.000032 seconds
+
+ 81: 547.605835, 303.254089 avg loss, 0.000000 rate, 0.523769 seconds, 10449 images, 7.944984 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.342936), count: 46, class_loss = 184.438660, iou_loss = 2.909713, total_loss = 187.348373 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.277873), count: 100, class_loss = 895.827393, iou_loss = 10.628997, total_loss = 906.456421 
+ total_bbox = 31457, rewritten_bbox = 4.949614 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.305408), count: 31, class_loss = 182.824417, iou_loss = 2.472826, total_loss = 185.297241 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.291454), count: 84, class_loss = 895.422791, iou_loss = 6.571130, total_loss = 901.993896 
+ total_bbox = 31572, rewritten_bbox = 4.937920 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.394875), count: 36, class_loss = 184.040100, iou_loss = 1.851017, total_loss = 185.891113 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.289220), count: 164, class_loss = 897.189758, iou_loss = 14.094567, total_loss = 911.284363 
+ total_bbox = 31772, rewritten_bbox = 4.935163 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000033 seconds
+
+ 82: 546.378601, 327.566528 avg loss, 0.000000 rate, 0.535673 seconds, 10578 images, 7.938205 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.327388), count: 38, class_loss = 182.637222, iou_loss = 3.432447, total_loss = 186.069672 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.261742), count: 347, class_loss = 897.133179, iou_loss = 33.035339, total_loss = 930.168518 
+ total_bbox = 32157, rewritten_bbox = 4.935162 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.334545), count: 24, class_loss = 181.616119, iou_loss = 1.572629, total_loss = 183.188751 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.295421), count: 66, class_loss = 889.874634, iou_loss = 5.477562, total_loss = 895.352173 
+ total_bbox = 32247, rewritten_bbox = 4.930691 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.365566), count: 30, class_loss = 182.326477, iou_loss = 1.779127, total_loss = 184.105606 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.302673), count: 70, class_loss = 889.872803, iou_loss = 6.495094, total_loss = 896.367920 
+ total_bbox = 32347, rewritten_bbox = 4.924723 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000041 seconds
+
+ 83: 545.875427, 349.397430 avg loss, 0.000000 rate, 0.539876 seconds, 10707 images, 7.933145 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.323967), count: 27, class_loss = 182.199432, iou_loss = 1.730219, total_loss = 183.929657 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.295117), count: 61, class_loss = 886.013184, iou_loss = 5.884357, total_loss = 891.897522 
+ total_bbox = 32435, rewritten_bbox = 4.917527 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.371461), count: 32, class_loss = 182.229340, iou_loss = 2.372456, total_loss = 184.601791 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.223624), count: 86, class_loss = 886.089722, iou_loss = 8.103016, total_loss = 894.192749 
+ total_bbox = 32553, rewritten_bbox = 4.908918 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.456649), count: 28, class_loss = 181.907471, iou_loss = 1.130360, total_loss = 183.037842 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.301464), count: 30, class_loss = 884.394592, iou_loss = 2.155705, total_loss = 886.550354 
+ total_bbox = 32611, rewritten_bbox = 4.903254 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000059 seconds
+
+ 84: 537.368347, 368.194519 avg loss, 0.000000 rate, 0.511246 seconds, 10836 images, 7.928714 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.385510), count: 41, class_loss = 180.575867, iou_loss = 2.239337, total_loss = 182.815201 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.252665), count: 80, class_loss = 879.977844, iou_loss = 7.718841, total_loss = 887.696655 
+ total_bbox = 32732, rewritten_bbox = 4.888183 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.387808), count: 27, class_loss = 180.795853, iou_loss = 1.665062, total_loss = 182.460907 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.290762), count: 62, class_loss = 879.978027, iou_loss = 5.957849, total_loss = 885.935852 
+ total_bbox = 32821, rewritten_bbox = 4.890162 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.394812), count: 19, class_loss = 180.007248, iou_loss = 0.921534, total_loss = 180.928787 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.318069), count: 59, class_loss = 880.134705, iou_loss = 5.109102, total_loss = 885.243835 
+ total_bbox = 32899, rewritten_bbox = 4.887687 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000067 seconds
+
+ 85: 534.180237, 384.793091 avg loss, 0.000000 rate, 0.529505 seconds, 10965 images, 7.920382 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.427726), count: 36, class_loss = 180.680664, iou_loss = 1.549612, total_loss = 182.230270 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262518), count: 131, class_loss = 876.381714, iou_loss = 12.542333, total_loss = 888.924072 
+ total_bbox = 33066, rewritten_bbox = 4.872074 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.463007), count: 34, class_loss = 180.320496, iou_loss = 1.237838, total_loss = 181.558334 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.288991), count: 36, class_loss = 875.196228, iou_loss = 3.886810, total_loss = 879.083008 
+ total_bbox = 33136, rewritten_bbox = 4.861782 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.375500), count: 33, class_loss = 180.185791, iou_loss = 1.808696, total_loss = 181.994476 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.257209), count: 83, class_loss = 873.166626, iou_loss = 8.560047, total_loss = 881.726624 
+ total_bbox = 33252, rewritten_bbox = 4.859858 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000038 seconds
+
+ 86: 532.586121, 399.572388 avg loss, 0.000000 rate, 0.552790 seconds, 11094 images, 7.914652 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.353702), count: 27, class_loss = 178.415604, iou_loss = 1.722327, total_loss = 180.137939 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.253342), count: 98, class_loss = 871.408264, iou_loss = 8.883176, total_loss = 880.291443 
+ total_bbox = 33377, rewritten_bbox = 4.862630 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.457219), count: 15, class_loss = 178.889130, iou_loss = 0.732819, total_loss = 179.621964 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.241437), count: 60, class_loss = 869.554260, iou_loss = 6.180142, total_loss = 875.734375 
+ total_bbox = 33452, rewritten_bbox = 4.851728 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.353991), count: 31, class_loss = 179.359924, iou_loss = 1.953329, total_loss = 181.313263 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.294566), count: 55, class_loss = 870.480164, iou_loss = 4.794240, total_loss = 875.274414 
+ total_bbox = 33537, rewritten_bbox = 4.842413 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000072 seconds
+
+ 87: 528.728882, 412.488037 avg loss, 0.000000 rate, 0.536262 seconds, 11223 images, 7.912194 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.373292), count: 30, class_loss = 179.924332, iou_loss = 1.819188, total_loss = 181.743530 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.265731), count: 109, class_loss = 864.511902, iou_loss = 10.617278, total_loss = 875.129150 
+ total_bbox = 33676, rewritten_bbox = 4.834303 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.387164), count: 34, class_loss = 177.190002, iou_loss = 2.053552, total_loss = 179.243546 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.335090), count: 76, class_loss = 862.988342, iou_loss = 5.782885, total_loss = 868.771240 
+ total_bbox = 33786, rewritten_bbox = 4.836323 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.331920), count: 35, class_loss = 178.639938, iou_loss = 2.672329, total_loss = 181.312256 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.288305), count: 104, class_loss = 863.942566, iou_loss = 9.385901, total_loss = 873.328491 
+ total_bbox = 33925, rewritten_bbox = 4.816507 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000067 seconds
+
+ 88: 526.588074, 423.898041 avg loss, 0.000000 rate, 0.527398 seconds, 11352 images, 7.907472 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.318367), count: 44, class_loss = 177.516068, iou_loss = 3.173238, total_loss = 180.689301 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.252484), count: 170, class_loss = 859.521179, iou_loss = 18.992641, total_loss = 878.513794 
+ total_bbox = 34139, rewritten_bbox = 4.827323 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.371754), count: 50, class_loss = 179.470703, iou_loss = 2.933889, total_loss = 182.404587 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.249784), count: 92, class_loss = 856.476379, iou_loss = 8.801145, total_loss = 865.277527 
+ total_bbox = 34280, rewritten_bbox = 4.813302 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.335597), count: 34, class_loss = 177.754364, iou_loss = 1.849030, total_loss = 179.603409 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.257339), count: 192, class_loss = 859.690796, iou_loss = 19.607103, total_loss = 879.297852 
+ total_bbox = 34506, rewritten_bbox = 4.825248 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000068 seconds
+
+ 89: 527.631042, 434.271332 avg loss, 0.000000 rate, 0.542903 seconds, 11481 images, 7.901576 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.338172), count: 28, class_loss = 175.177475, iou_loss = 1.918900, total_loss = 177.096375 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.312391), count: 99, class_loss = 849.594360, iou_loss = 7.894350, total_loss = 857.488708 
+ total_bbox = 34633, rewritten_bbox = 4.810441 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.354554), count: 36, class_loss = 176.660751, iou_loss = 2.840900, total_loss = 179.501663 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.303521), count: 89, class_loss = 848.315247, iou_loss = 6.229288, total_loss = 854.544495 
+ total_bbox = 34758, rewritten_bbox = 4.801772 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.388712), count: 39, class_loss = 176.483521, iou_loss = 2.189692, total_loss = 178.673218 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.261823), count: 38, class_loss = 847.826477, iou_loss = 3.226199, total_loss = 851.052673 
+ total_bbox = 34834, rewritten_bbox = 4.791296 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000075 seconds
+
+ 90: 516.392883, 442.483490 avg loss, 0.000000 rate, 0.552442 seconds, 11610 images, 7.897888 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.290604), count: 34, class_loss = 102.940178, iou_loss = 2.766386, total_loss = 105.706566 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.281563), count: 81, class_loss = 493.321045, iou_loss = 5.945812, total_loss = 499.266846 
+ total_bbox = 34949, rewritten_bbox = 4.775530 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.367074), count: 14, class_loss = 102.015182, iou_loss = 0.703329, total_loss = 102.718513 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.280079), count: 67, class_loss = 493.470825, iou_loss = 6.628952, total_loss = 500.099792 
+ total_bbox = 35030, rewritten_bbox = 4.764488 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.308218), count: 18, class_loss = 101.636276, iou_loss = 1.096509, total_loss = 102.732788 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.263437), count: 83, class_loss = 493.000122, iou_loss = 7.224155, total_loss = 500.224304 
+ total_bbox = 35131, rewritten_bbox = 4.765022 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 416 x 416 
+ try to allocate additional workspace_size = 357.38 MB 
+ CUDA allocate done! 
+Loaded: 0.079326 seconds
+
+ 91: 301.791473, 428.414276 avg loss, 0.000000 rate, 0.319644 seconds, 11739 images, 7.895561 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.394024), count: 18, class_loss = 101.624985, iou_loss = 0.833814, total_loss = 102.458801 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.301961), count: 36, class_loss = 487.958496, iou_loss = 3.027298, total_loss = 490.985779 
+ total_bbox = 35185, rewritten_bbox = 4.757709 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.308018), count: 22, class_loss = 101.270294, iou_loss = 1.701501, total_loss = 102.971794 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.192040), count: 203, class_loss = 492.580719, iou_loss = 24.674191, total_loss = 517.254883 
+ total_bbox = 35410, rewritten_bbox = 4.744422 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.373665), count: 13, class_loss = 101.586662, iou_loss = 0.679824, total_loss = 102.266487 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.194713), count: 81, class_loss = 487.948090, iou_loss = 19.052599, total_loss = 507.000671 
+ total_bbox = 35504, rewritten_bbox = 4.776927 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.001094 seconds
+
+ 92: 303.823090, 415.955170 avg loss, 0.000000 rate, 0.334816 seconds, 11868 images, 7.871963 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.370050), count: 21, class_loss = 101.413277, iou_loss = 1.047102, total_loss = 102.460381 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.199388), count: 120, class_loss = 484.106232, iou_loss = 15.932367, total_loss = 500.038605 
+ total_bbox = 35645, rewritten_bbox = 4.811334 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.372021), count: 22, class_loss = 101.519180, iou_loss = 1.171228, total_loss = 102.690407 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.231860), count: 73, class_loss = 482.052826, iou_loss = 7.421103, total_loss = 489.473938 
+ total_bbox = 35740, rewritten_bbox = 4.804141 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.384858), count: 20, class_loss = 101.324570, iou_loss = 0.992324, total_loss = 102.316895 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.268486), count: 93, class_loss = 483.344391, iou_loss = 8.313544, total_loss = 491.657928 
+ total_bbox = 35853, rewritten_bbox = 4.808524 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000083 seconds
+
+ 93: 298.106354, 404.170288 avg loss, 0.000000 rate, 0.323352 seconds, 11997 images, 7.839870 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.401165), count: 20, class_loss = 99.912529, iou_loss = 0.871185, total_loss = 100.783714 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.220122), count: 313, class_loss = 486.143951, iou_loss = 34.952396, total_loss = 521.096313 
+ total_bbox = 36186, rewritten_bbox = 4.869287 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.390180), count: 18, class_loss = 99.772438, iou_loss = 0.826808, total_loss = 100.599243 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.278457), count: 35, class_loss = 476.889160, iou_loss = 3.532295, total_loss = 480.421478 
+ total_bbox = 36239, rewritten_bbox = 4.867684 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.322468), count: 23, class_loss = 100.197823, iou_loss = 1.482388, total_loss = 101.680206 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.223552), count: 94, class_loss = 478.291779, iou_loss = 9.054142, total_loss = 487.345917 
+ total_bbox = 36356, rewritten_bbox = 4.887776 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.122316 seconds - performance bottleneck on CPU or Disk HDD/SSD
+
+ 94: 298.654480, 393.618713 avg loss, 0.000000 rate, 0.327993 seconds, 12126 images, 7.806346 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.401547), count: 19, class_loss = 99.286034, iou_loss = 0.980889, total_loss = 100.266922 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.251337), count: 88, class_loss = 473.129486, iou_loss = 6.661655, total_loss = 479.791138 
+ total_bbox = 36463, rewritten_bbox = 4.898116 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.337042), count: 26, class_loss = 99.917091, iou_loss = 2.252248, total_loss = 102.169342 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.219939), count: 58, class_loss = 472.845490, iou_loss = 6.715843, total_loss = 479.561310 
+ total_bbox = 36547, rewritten_bbox = 4.911484 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.341084), count: 25, class_loss = 99.230034, iou_loss = 1.663870, total_loss = 100.893906 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.277975), count: 170, class_loss = 475.495636, iou_loss = 16.192724, total_loss = 491.688354 
+ total_bbox = 36742, rewritten_bbox = 4.942573 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000046 seconds
+
+ 95: 292.395172, 383.496368 avg loss, 0.000000 rate, 0.343522 seconds, 12255 images, 7.790761 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.344030), count: 27, class_loss = 98.958076, iou_loss = 1.751317, total_loss = 100.709396 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.284817), count: 61, class_loss = 469.618835, iou_loss = 5.719704, total_loss = 475.338531 
+ total_bbox = 36830, rewritten_bbox = 4.936193 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.396584), count: 26, class_loss = 98.390572, iou_loss = 1.229458, total_loss = 99.620026 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.195712), count: 203, class_loss = 469.830109, iou_loss = 22.946039, total_loss = 492.776154 
+ total_bbox = 37059, rewritten_bbox = 5.000135 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.327068), count: 29, class_loss = 99.309845, iou_loss = 2.396916, total_loss = 101.706757 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.210408), count: 100, class_loss = 469.606110, iou_loss = 11.199082, total_loss = 480.805176 
+ total_bbox = 37188, rewritten_bbox = 5.012370 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000044 seconds
+
+ 96: 291.826019, 374.329346 avg loss, 0.000000 rate, 0.329306 seconds, 12384 images, 7.760530 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.379772), count: 21, class_loss = 98.251228, iou_loss = 0.955987, total_loss = 99.207214 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.227020), count: 115, class_loss = 465.080353, iou_loss = 11.454805, total_loss = 476.535156 
+ total_bbox = 37324, rewritten_bbox = 5.028936 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.359441), count: 16, class_loss = 97.771713, iou_loss = 0.693552, total_loss = 98.465263 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.233499), count: 134, class_loss = 466.005188, iou_loss = 17.507221, total_loss = 483.512390 
+ total_bbox = 37474, rewritten_bbox = 5.016812 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.430364), count: 22, class_loss = 97.579727, iou_loss = 0.828057, total_loss = 98.407784 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.249212), count: 169, class_loss = 468.307129, iou_loss = 14.226153, total_loss = 482.533295 
+ total_bbox = 37665, rewritten_bbox = 5.015266 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000052 seconds
+
+ 97: 289.776855, 365.874084 avg loss, 0.000000 rate, 0.337319 seconds, 12513 images, 7.728621 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.383988), count: 22, class_loss = 96.540070, iou_loss = 1.042253, total_loss = 97.582329 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239104), count: 66, class_loss = 458.788055, iou_loss = 4.755859, total_loss = 463.543915 
+ total_bbox = 37753, rewritten_bbox = 5.006225 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.364860), count: 14, class_loss = 97.020248, iou_loss = 0.630178, total_loss = 97.650421 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243591), count: 85, class_loss = 460.635040, iou_loss = 9.490189, total_loss = 470.125214 
+ total_bbox = 37852, rewritten_bbox = 4.998415 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.337297), count: 21, class_loss = 97.277832, iou_loss = 1.333144, total_loss = 98.610977 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.181486), count: 297, class_loss = 467.850708, iou_loss = 45.990643, total_loss = 513.841370 
+ total_bbox = 38170, rewritten_bbox = 5.001310 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000061 seconds
+
+ 98: 290.225708, 358.309235 avg loss, 0.000000 rate, 0.331248 seconds, 12642 images, 7.698150 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.380782), count: 29, class_loss = 97.045273, iou_loss = 1.437966, total_loss = 98.483238 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.234538), count: 68, class_loss = 452.976776, iou_loss = 7.328806, total_loss = 460.305603 
+ total_bbox = 38267, rewritten_bbox = 5.004312 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.352408), count: 20, class_loss = 96.487839, iou_loss = 1.080487, total_loss = 97.568321 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.263275), count: 68, class_loss = 453.036530, iou_loss = 7.444404, total_loss = 460.480927 
+ total_bbox = 38355, rewritten_bbox = 5.000652 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.333348), count: 23, class_loss = 95.880974, iou_loss = 1.429222, total_loss = 97.310196 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.253379), count: 83, class_loss = 455.882996, iou_loss = 8.373320, total_loss = 464.256317 
+ total_bbox = 38461, rewritten_bbox = 4.992070 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000073 seconds
+
+ 99: 279.734100, 350.451721 avg loss, 0.000000 rate, 0.337356 seconds, 12771 images, 7.667130 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.404237), count: 27, class_loss = 95.472145, iou_loss = 1.210688, total_loss = 96.682831 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.220791), count: 75, class_loss = 449.597382, iou_loss = 11.918559, total_loss = 461.515930 
+ total_bbox = 38563, rewritten_bbox = 5.022950 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.311751), count: 31, class_loss = 96.479401, iou_loss = 2.178052, total_loss = 98.657455 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.229744), count: 128, class_loss = 450.202301, iou_loss = 12.701581, total_loss = 462.903900 
+ total_bbox = 38722, rewritten_bbox = 5.028150 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.417347), count: 27, class_loss = 95.365654, iou_loss = 1.134868, total_loss = 96.500519 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.274859), count: 28, class_loss = 447.103699, iou_loss = 2.466161, total_loss = 449.569855 
+ total_bbox = 38777, rewritten_bbox = 5.021018 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000039 seconds
+
+ 100: 277.638428, 343.170380 avg loss, 0.000000 rate, 0.340050 seconds, 12900 images, 7.637274 hours left
+Saving weights to /WORKING/modelSale/Car_Plate_detect/aug_20220425/cfg_train/weights//yolov3-tiny_last.weights
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.317219), count: 28, class_loss = 68.387665, iou_loss = 4.506330, total_loss = 72.893990 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.276522), count: 153, class_loss = 321.977234, iou_loss = 14.005859, total_loss = 335.983093 
+ total_bbox = 38958, rewritten_bbox = 5.041327 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.363452), count: 18, class_loss = 67.888283, iou_loss = 0.820523, total_loss = 68.708809 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.178677), count: 62, class_loss = 318.628235, iou_loss = 7.367414, total_loss = 325.995636 
+ total_bbox = 39038, rewritten_bbox = 5.033557 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.439247), count: 18, class_loss = 67.883842, iou_loss = 0.816719, total_loss = 68.700562 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.263143), count: 38, class_loss = 317.481079, iou_loss = 3.198015, total_loss = 320.679108 
+ total_bbox = 39094, rewritten_bbox = 5.028905 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 352 x 352 
+ try to allocate additional workspace_size = 255.93 MB 
+ CUDA allocate done! 
+Loaded: 0.150200 seconds - performance bottleneck on CPU or Disk HDD/SSD
+
+ 101: 198.826889, 328.736023 avg loss, 0.000000 rate, 0.246314 seconds, 13029 images, 7.608081 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.377583), count: 21, class_loss = 67.703568, iou_loss = 1.173970, total_loss = 68.877541 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225941), count: 114, class_loss = 316.028473, iou_loss = 10.765352, total_loss = 326.793823 
+ total_bbox = 39229, rewritten_bbox = 5.019246 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.389938), count: 16, class_loss = 66.545753, iou_loss = 0.761900, total_loss = 67.307655 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.237213), count: 110, class_loss = 316.294647, iou_loss = 10.578875, total_loss = 326.873535 
+ total_bbox = 39355, rewritten_bbox = 5.008258 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.434642), count: 17, class_loss = 67.644875, iou_loss = 0.671216, total_loss = 68.316093 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.259229), count: 38, class_loss = 313.126862, iou_loss = 4.756859, total_loss = 317.883728 
+ total_bbox = 39410, rewritten_bbox = 5.003806 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.064345 seconds
+
+ 102: 196.008728, 315.463287 avg loss, 0.000000 rate, 0.244193 seconds, 13158 images, 7.587003 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.329490), count: 20, class_loss = 66.830765, iou_loss = 1.008329, total_loss = 67.839096 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.261174), count: 59, class_loss = 309.496857, iou_loss = 5.478834, total_loss = 314.975677 
+ total_bbox = 39489, rewritten_bbox = 4.998860 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.379529), count: 18, class_loss = 66.750298, iou_loss = 0.978147, total_loss = 67.728439 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.224998), count: 272, class_loss = 316.010651, iou_loss = 26.799078, total_loss = 342.809723 
+ total_bbox = 39779, rewritten_bbox = 5.055431 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.302594), count: 18, class_loss = 66.647186, iou_loss = 1.103118, total_loss = 67.750298 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.191718), count: 139, class_loss = 312.192871, iou_loss = 15.975677, total_loss = 328.168549 
+ total_bbox = 39936, rewritten_bbox = 5.110677 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.125450 seconds - performance bottleneck on CPU or Disk HDD/SSD
+
+ 103: 198.211960, 303.738159 avg loss, 0.000000 rate, 0.271362 seconds, 13287 images, 7.553936 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.416279), count: 25, class_loss = 66.571480, iou_loss = 0.968358, total_loss = 67.539841 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243963), count: 64, class_loss = 306.044525, iou_loss = 8.220884, total_loss = 314.265411 
+ total_bbox = 40025, rewritten_bbox = 5.111805 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.394146), count: 15, class_loss = 66.582039, iou_loss = 0.598445, total_loss = 67.180481 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225568), count: 82, class_loss = 308.894562, iou_loss = 13.971180, total_loss = 322.865723 
+ total_bbox = 40122, rewritten_bbox = 5.119386 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.458492), count: 23, class_loss = 66.234322, iou_loss = 0.665578, total_loss = 66.899902 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.223736), count: 74, class_loss = 307.643036, iou_loss = 8.491347, total_loss = 316.134369 
+ total_bbox = 40219, rewritten_bbox = 5.112012 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.078290 seconds
+
+ 104: 192.480988, 292.612427 avg loss, 0.000000 rate, 0.259194 seconds, 13416 images, 7.533437 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.340762), count: 16, class_loss = 65.617355, iou_loss = 0.913432, total_loss = 66.530785 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.214994), count: 274, class_loss = 310.431000, iou_loss = 35.016762, total_loss = 345.447754 
+ total_bbox = 40509, rewritten_bbox = 5.156879 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.384874), count: 20, class_loss = 65.850685, iou_loss = 1.119691, total_loss = 66.970375 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.239432), count: 191, class_loss = 307.359863, iou_loss = 18.161995, total_loss = 325.521851 
+ total_bbox = 40720, rewritten_bbox = 5.179273 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.404105), count: 31, class_loss = 65.969833, iou_loss = 1.479549, total_loss = 67.449387 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.208066), count: 58, class_loss = 303.636536, iou_loss = 10.260265, total_loss = 313.896790 
+ total_bbox = 40809, rewritten_bbox = 5.182680 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.059899 seconds
+
+ 105: 197.636154, 283.114807 avg loss, 0.000000 rate, 0.263762 seconds, 13545 images, 7.504934 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.416813), count: 18, class_loss = 64.630539, iou_loss = 0.746866, total_loss = 65.377411 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.256094), count: 115, class_loss = 301.063293, iou_loss = 9.880110, total_loss = 310.943390 
+ total_bbox = 40942, rewritten_bbox = 5.170729 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.340681), count: 19, class_loss = 65.109650, iou_loss = 1.369975, total_loss = 66.479622 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.240101), count: 78, class_loss = 299.639435, iou_loss = 9.240915, total_loss = 308.880371 
+ total_bbox = 41039, rewritten_bbox = 5.170691 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.358195), count: 18, class_loss = 65.128426, iou_loss = 0.981212, total_loss = 66.109634 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.222313), count: 108, class_loss = 301.801758, iou_loss = 11.637672, total_loss = 313.439423 
+ total_bbox = 41165, rewritten_bbox = 5.174299 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.054765 seconds
+
+ 106: 188.538300, 273.657166 avg loss, 0.000000 rate, 0.248445 seconds, 13674 images, 7.474792 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.362416), count: 14, class_loss = 63.967247, iou_loss = 1.327353, total_loss = 65.294601 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262275), count: 165, class_loss = 298.394226, iou_loss = 18.274073, total_loss = 316.668274 
+ total_bbox = 41344, rewritten_bbox = 5.200271 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.353230), count: 26, class_loss = 64.445122, iou_loss = 1.864854, total_loss = 66.309975 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.299378), count: 41, class_loss = 296.289093, iou_loss = 3.208530, total_loss = 299.497650 
+ total_bbox = 41411, rewritten_bbox = 5.191857 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.306206), count: 20, class_loss = 64.637619, iou_loss = 1.142266, total_loss = 65.779884 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.222922), count: 84, class_loss = 298.115723, iou_loss = 11.125046, total_loss = 309.240753 
+ total_bbox = 41515, rewritten_bbox = 5.183669 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.075210 seconds
+
+ 107: 187.131851, 265.004639 avg loss, 0.000000 rate, 0.259062 seconds, 13803 images, 7.442119 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.312848), count: 22, class_loss = 64.173004, iou_loss = 1.644259, total_loss = 65.817261 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262491), count: 158, class_loss = 297.423431, iou_loss = 20.062342, total_loss = 317.485748 
+ total_bbox = 41695, rewritten_bbox = 5.187673 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.399655), count: 18, class_loss = 63.696930, iou_loss = 0.780109, total_loss = 64.477036 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.208380), count: 44, class_loss = 292.250488, iou_loss = 5.274096, total_loss = 297.524567 
+ total_bbox = 41757, rewritten_bbox = 5.182364 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.317386), count: 16, class_loss = 64.047867, iou_loss = 1.204073, total_loss = 65.251938 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.196375), count: 95, class_loss = 294.272186, iou_loss = 13.356309, total_loss = 307.628510 
+ total_bbox = 41868, rewritten_bbox = 5.204452 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.095952 seconds
+
+ 108: 186.364182, 257.140594 avg loss, 0.000000 rate, 0.270151 seconds, 13932 images, 7.414079 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.318104), count: 22, class_loss = 63.177502, iou_loss = 1.720629, total_loss = 64.898132 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.200120), count: 95, class_loss = 290.447144, iou_loss = 20.788948, total_loss = 311.236115 
+ total_bbox = 41985, rewritten_bbox = 5.218531 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.436850), count: 27, class_loss = 63.475624, iou_loss = 1.305261, total_loss = 64.780884 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.237651), count: 198, class_loss = 293.028442, iou_loss = 21.407022, total_loss = 314.435486 
+ total_bbox = 42210, rewritten_bbox = 5.228619 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.319977), count: 18, class_loss = 63.188187, iou_loss = 1.210955, total_loss = 64.399139 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.209472), count: 97, class_loss = 291.793365, iou_loss = 10.529365, total_loss = 302.322754 
+ total_bbox = 42325, rewritten_bbox = 5.228588 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.110792 seconds - performance bottleneck on CPU or Disk HDD/SSD
+
+ 109: 187.012085, 250.127747 avg loss, 0.000000 rate, 0.254276 seconds, 14061 images, 7.390723 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.461737), count: 9, class_loss = 62.484245, iou_loss = 0.208059, total_loss = 62.692303 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.263216), count: 18, class_loss = 284.632721, iou_loss = 2.697901, total_loss = 287.330627 
+ total_bbox = 42352, rewritten_bbox = 5.227616 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.387572), count: 11, class_loss = 62.696407, iou_loss = 0.483211, total_loss = 63.179619 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.177709), count: 145, class_loss = 288.447174, iou_loss = 27.690521, total_loss = 316.137695 
+ total_bbox = 42508, rewritten_bbox = 5.281359 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.388857), count: 16, class_loss = 62.511650, iou_loss = 0.832236, total_loss = 63.343887 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.225564), count: 94, class_loss = 285.797607, iou_loss = 9.427189, total_loss = 295.224792 
+ total_bbox = 42618, rewritten_bbox = 5.281806 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.099260 seconds
+
+ 110: 181.318161, 243.246796 avg loss, 0.000000 rate, 0.270223 seconds, 14190 images, 7.367483 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.390756), count: 31, class_loss = 114.468399, iou_loss = 2.139138, total_loss = 116.607536 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.296164), count: 73, class_loss = 524.022461, iou_loss = 4.872774, total_loss = 528.895264 
+ total_bbox = 42722, rewritten_bbox = 5.273630 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.341675), count: 42, class_loss = 114.623657, iou_loss = 2.971430, total_loss = 117.595093 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.270451), count: 134, class_loss = 525.605042, iou_loss = 11.034339, total_loss = 536.639404 
+ total_bbox = 42898, rewritten_bbox = 5.256655 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.391056), count: 21, class_loss = 113.839233, iou_loss = 1.132472, total_loss = 114.971703 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.241143), count: 48, class_loss = 522.781677, iou_loss = 4.517941, total_loss = 527.299622 
+ total_bbox = 42967, rewritten_bbox = 5.259851 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 480 x 480 
+ try to allocate additional workspace_size = 475.74 MB 
+ CUDA allocate done! 
+Loaded: 0.000027 seconds
+
+ 111: 323.668091, 251.288925 avg loss, 0.000000 rate, 0.428497 seconds, 14319 images, 7.345052 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.343996), count: 36, class_loss = 114.233658, iou_loss = 2.805687, total_loss = 117.039345 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.315759), count: 32, class_loss = 518.557068, iou_loss = 2.520530, total_loss = 521.077637 
+ total_bbox = 43035, rewritten_bbox = 5.251539 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.376115), count: 19, class_loss = 113.932358, iou_loss = 0.938794, total_loss = 114.871147 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.320655), count: 27, class_loss = 515.071289, iou_loss = 2.148029, total_loss = 517.219360 
+ total_bbox = 43081, rewritten_bbox = 5.245932 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.325590), count: 34, class_loss = 114.804947, iou_loss = 2.252702, total_loss = 117.057648 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.237848), count: 120, class_loss = 515.593628, iou_loss = 11.974427, total_loss = 527.568115 
+ total_bbox = 43235, rewritten_bbox = 5.231873 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000048 seconds
+
+ 112: 319.138855, 258.073914 avg loss, 0.000000 rate, 0.418069 seconds, 14448 images, 7.331038 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.318553), count: 40, class_loss = 113.957611, iou_loss = 3.871332, total_loss = 117.828941 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.282962), count: 204, class_loss = 512.786865, iou_loss = 22.216843, total_loss = 535.003662 
+ total_bbox = 43479, rewritten_bbox = 5.234711 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.392793), count: 31, class_loss = 114.039696, iou_loss = 2.115121, total_loss = 116.154816 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.201428), count: 131, class_loss = 510.920135, iou_loss = 15.258266, total_loss = 526.178406 
+ total_bbox = 43641, rewritten_bbox = 5.229028 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.329493), count: 34, class_loss = 114.475700, iou_loss = 2.448322, total_loss = 116.924019 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.251994), count: 59, class_loss = 508.683136, iou_loss = 7.181913, total_loss = 515.865051 
+ total_bbox = 43734, rewritten_bbox = 5.224768 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000064 seconds
+
+ 113: 321.325836, 264.399109 avg loss, 0.000000 rate, 0.429846 seconds, 14577 images, 7.315704 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.304064), count: 30, class_loss = 111.564522, iou_loss = 2.181073, total_loss = 113.745590 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.221557), count: 115, class_loss = 499.957031, iou_loss = 13.023664, total_loss = 512.980713 
+ total_bbox = 43879, rewritten_bbox = 5.216619 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.350904), count: 28, class_loss = 111.809692, iou_loss = 1.737748, total_loss = 113.547440 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.270834), count: 129, class_loss = 501.145172, iou_loss = 11.858921, total_loss = 513.004089 
+ total_bbox = 44036, rewritten_bbox = 5.213916 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.353495), count: 25, class_loss = 110.534554, iou_loss = 2.036814, total_loss = 112.571365 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.266220), count: 59, class_loss = 499.357819, iou_loss = 5.056822, total_loss = 504.414642 
+ total_bbox = 44120, rewritten_bbox = 5.206255 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000073 seconds
+
+ 114: 311.710632, 269.130249 avg loss, 0.000000 rate, 0.437006 seconds, 14706 images, 7.302160 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.369741), count: 24, class_loss = 110.389236, iou_loss = 1.606650, total_loss = 111.995888 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.209765), count: 77, class_loss = 490.648804, iou_loss = 9.965071, total_loss = 500.613861 
+ total_bbox = 44221, rewritten_bbox = 5.198887 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.370159), count: 23, class_loss = 109.447594, iou_loss = 1.354469, total_loss = 110.802063 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.236772), count: 137, class_loss = 494.642334, iou_loss = 15.728198, total_loss = 510.370544 
+ total_bbox = 44381, rewritten_bbox = 5.202677 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.350530), count: 35, class_loss = 109.081665, iou_loss = 3.254735, total_loss = 112.336403 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.240993), count: 64, class_loss = 492.035614, iou_loss = 7.609602, total_loss = 499.645203 
+ total_bbox = 44480, rewritten_bbox = 5.200090 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000055 seconds
+
+ 115: 307.627319, 272.979950 avg loss, 0.000000 rate, 0.432478 seconds, 14835 images, 7.289746 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.333735), count: 27, class_loss = 107.999458, iou_loss = 2.248001, total_loss = 110.247459 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.249752), count: 125, class_loss = 485.251312, iou_loss = 13.132949, total_loss = 498.384277 
+ total_bbox = 44632, rewritten_bbox = 5.193583 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.345527), count: 31, class_loss = 108.465637, iou_loss = 2.094238, total_loss = 110.559875 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.249299), count: 124, class_loss = 488.342194, iou_loss = 10.881177, total_loss = 499.223389 
+ total_bbox = 44787, rewritten_bbox = 5.180075 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.362180), count: 50, class_loss = 108.716171, iou_loss = 3.346839, total_loss = 112.063011 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.338184), count: 195, class_loss = 488.832886, iou_loss = 14.467841, total_loss = 503.300720 
+ total_bbox = 45032, rewritten_bbox = 5.169657 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000077 seconds
+
+ 116: 305.629791, 276.244934 avg loss, 0.000000 rate, 0.440287 seconds, 14964 images, 7.276825 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.362117), count: 31, class_loss = 106.463699, iou_loss = 1.893657, total_loss = 108.357353 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.264713), count: 34, class_loss = 472.219574, iou_loss = 3.552734, total_loss = 475.772308 
+ total_bbox = 45097, rewritten_bbox = 5.164423 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.346958), count: 28, class_loss = 107.298416, iou_loss = 2.120356, total_loss = 109.418777 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.295233), count: 44, class_loss = 473.814636, iou_loss = 4.280523, total_loss = 478.095154 
+ total_bbox = 45169, rewritten_bbox = 5.156191 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.333080), count: 22, class_loss = 106.874924, iou_loss = 1.707213, total_loss = 108.582130 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.301222), count: 50, class_loss = 472.509613, iou_loss = 4.559957, total_loss = 477.069580 
+ total_bbox = 45241, rewritten_bbox = 5.156827 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000079 seconds
+
+ 117: 292.882538, 277.908691 avg loss, 0.000000 rate, 0.457456 seconds, 15093 images, 7.265130 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.362934), count: 22, class_loss = 103.693146, iou_loss = 1.231809, total_loss = 104.924950 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.214172), count: 108, class_loss = 467.853027, iou_loss = 17.937181, total_loss = 485.790192 
+ total_bbox = 45371, rewritten_bbox = 5.150867 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.336965), count: 24, class_loss = 105.415436, iou_loss = 1.582906, total_loss = 106.998344 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.262155), count: 139, class_loss = 466.256042, iou_loss = 12.393078, total_loss = 478.649109 
+ total_bbox = 45534, rewritten_bbox = 5.132429 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.316186), count: 22, class_loss = 105.594261, iou_loss = 1.384198, total_loss = 106.978462 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.358126), count: 33, class_loss = 462.599640, iou_loss = 2.084529, total_loss = 464.684174 
+ total_bbox = 45589, rewritten_bbox = 5.126236 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000072 seconds
+
+ 118: 291.337555, 279.251587 avg loss, 0.000000 rate, 0.423008 seconds, 15222 images, 7.255915 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.420128), count: 30, class_loss = 104.074455, iou_loss = 1.653059, total_loss = 105.727516 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.300062), count: 45, class_loss = 454.945770, iou_loss = 4.883584, total_loss = 459.829346 
+ total_bbox = 45664, rewritten_bbox = 5.117817 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.365286), count: 32, class_loss = 102.996819, iou_loss = 1.708644, total_loss = 104.705467 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243684), count: 116, class_loss = 458.746490, iou_loss = 15.218387, total_loss = 473.964874 
+ total_bbox = 45812, rewritten_bbox = 5.110015 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.309869), count: 26, class_loss = 103.565529, iou_loss = 2.113440, total_loss = 105.678970 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.301035), count: 49, class_loss = 452.177734, iou_loss = 3.630950, total_loss = 455.808685 
+ total_bbox = 45887, rewritten_bbox = 5.103842 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000079 seconds
+
+ 119: 284.285797, 279.755005 avg loss, 0.000000 rate, 0.432603 seconds, 15351 images, 7.242015 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.402072), count: 20, class_loss = 101.153618, iou_loss = 0.855264, total_loss = 102.008881 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.338018), count: 37, class_loss = 442.684052, iou_loss = 2.826581, total_loss = 445.510620 
+ total_bbox = 45944, rewritten_bbox = 5.097510 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.409827), count: 27, class_loss = 102.128517, iou_loss = 1.208485, total_loss = 103.337006 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.261125), count: 110, class_loss = 445.460358, iou_loss = 11.196766, total_loss = 456.657104 
+ total_bbox = 46081, rewritten_bbox = 5.091035 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.413266), count: 24, class_loss = 102.031197, iou_loss = 1.162813, total_loss = 103.194008 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.328801), count: 52, class_loss = 446.439575, iou_loss = 3.334666, total_loss = 449.774261 
+ total_bbox = 46157, rewritten_bbox = 5.084819 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.000082 seconds
+
+ 120: 276.746979, 279.454193 avg loss, 0.000000 rate, 0.426197 seconds, 15480 images, 7.229605 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.419481), count: 22, class_loss = 75.377258, iou_loss = 1.387139, total_loss = 76.764397 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.269913), count: 39, class_loss = 323.198212, iou_loss = 3.826263, total_loss = 327.024475 
+ total_bbox = 46218, rewritten_bbox = 5.080272 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.356074), count: 28, class_loss = 75.306000, iou_loss = 1.477085, total_loss = 76.783081 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.261521), count: 111, class_loss = 327.390411, iou_loss = 9.306231, total_loss = 336.696655 
+ total_bbox = 46357, rewritten_bbox = 5.067196 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.370580), count: 30, class_loss = 74.863800, iou_loss = 1.846191, total_loss = 76.709991 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.304063), count: 199, class_loss = 328.691345, iou_loss = 15.637536, total_loss = 344.328888 
+ total_bbox = 46586, rewritten_bbox = 5.065900 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Resizing, random_coef = 1.40 
+
+ 416 x 416 
+ try to allocate additional workspace_size = 357.38 MB 
+ CUDA allocate done! 
+Loaded: 0.096771 seconds
+
+ 121: 206.384583, 272.147217 avg loss, 0.000000 rate, 0.348469 seconds, 15609 images, 7.216423 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.328443), count: 29, class_loss = 75.230171, iou_loss = 1.975433, total_loss = 77.205605 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.229800), count: 145, class_loss = 320.043854, iou_loss = 15.999546, total_loss = 336.043396 
+ total_bbox = 46760, rewritten_bbox = 5.079127 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.409879), count: 27, class_loss = 73.697105, iou_loss = 1.072027, total_loss = 74.769135 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.280100), count: 94, class_loss = 318.374817, iou_loss = 8.648778, total_loss = 327.023590 
+ total_bbox = 46881, rewritten_bbox = 5.068151 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.414570), count: 28, class_loss = 74.360161, iou_loss = 1.328698, total_loss = 75.688866 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.321018), count: 26, class_loss = 317.456543, iou_loss = 1.685638, total_loss = 319.142181 
+ total_bbox = 46935, rewritten_bbox = 5.062320 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.030380 seconds
+
+ 122: 201.645477, 265.097046 avg loss, 0.000000 rate, 0.364678 seconds, 15738 images, 7.206059 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.379661), count: 23, class_loss = 72.443703, iou_loss = 1.502992, total_loss = 73.946701 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.249972), count: 80, class_loss = 310.698090, iou_loss = 8.236351, total_loss = 318.934418 
+ total_bbox = 47038, rewritten_bbox = 5.051235 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.384159), count: 32, class_loss = 72.967209, iou_loss = 2.017459, total_loss = 74.984673 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.287673), count: 52, class_loss = 309.396484, iou_loss = 4.970726, total_loss = 314.367218 
+ total_bbox = 47122, rewritten_bbox = 5.048597 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.354466), count: 39, class_loss = 73.170593, iou_loss = 2.638212, total_loss = 75.808800 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.300563), count: 82, class_loss = 309.862732, iou_loss = 6.091342, total_loss = 315.954071 
+ total_bbox = 47243, rewritten_bbox = 5.039900 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.029748 seconds
+
+ 123: 195.665985, 258.153931 avg loss, 0.000000 rate, 0.331208 seconds, 15867 images, 7.188781 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.325731), count: 23, class_loss = 71.377525, iou_loss = 1.292628, total_loss = 72.670151 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.273022), count: 82, class_loss = 300.942535, iou_loss = 7.356014, total_loss = 308.298553 
+ total_bbox = 47348, rewritten_bbox = 5.043508 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.373857), count: 32, class_loss = 71.769051, iou_loss = 1.597747, total_loss = 73.366798 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.250389), count: 138, class_loss = 303.691711, iou_loss = 16.436432, total_loss = 320.128143 
+ total_bbox = 47518, rewritten_bbox = 5.061240 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.353738), count: 28, class_loss = 72.241920, iou_loss = 1.280728, total_loss = 73.522652 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.340805), count: 27, class_loss = 300.735657, iou_loss = 1.996525, total_loss = 302.732178 
+ total_bbox = 47573, rewritten_bbox = 5.055388 % 
+
+ Tensor Cores are disabled until the first 3000 iterations are reached.
+ MJPEG-stream sent. 
+Loaded: 0.038385 seconds
+
+ 124: 191.786407, 251.517181 avg loss, 0.000000 rate, 0.332361 seconds, 15996 images, 7.166946 hours left
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.372589), count: 20, class_loss = 69.274910, iou_loss = 1.158828, total_loss = 70.433739 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.243666), count: 56, class_loss = 293.297882, iou_loss = 4.929415, total_loss = 298.227325 
+ total_bbox = 47649, rewritten_bbox = 5.049424 % 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 16 Avg (IOU: 0.399550), count: 21, class_loss = 69.889099, iou_loss = 0.913960, total_loss = 70.803055 
+v3 (mse loss, Normalizer: (iou: 0.75, obj: 1.00, cls: 1.00) Region 23 Avg (IOU: 0.197167), count: 76, class_loss = 296.552856, iou_loss = 10.320426, total_loss = 306.873291 
+ total_bbox = 47746, rewritten_bbox = 5.064299 % 
+Killed

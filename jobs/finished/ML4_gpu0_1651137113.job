@@ -1,0 +1,27 @@
+[user]
+owner = chtseng
+notify_line = 0
+notify_email = 0
+notify_sms = 0
+
+[job]
+submit_from = chtseng-ml6
+submit_time = 28/04/2022 17:11:53
+job_path = /data/squeue/test/yolov3_tiny.sh
+run_after_submit_min = 0
+esti_execute_hours = 0
+want_finish_after_hours = 0
+
+[host]
+reqs_cpus = 4
+reqs_ram = 8000
+reqs_gram = 14000
+
+[status]
+execute_host = ML4
+process_id = 34439
+execute_start_time = 28/04/2022 17:13:01
+execute_live_time = 28/04/2022 17:13:01
+execute_end_time = 28/04/2022 17:13:08
+execute_status = finished
+execute_log = /data/squeue/jobs/logs/ML4_gpu0_1651137113.log

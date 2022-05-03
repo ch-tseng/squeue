@@ -1,0 +1,29 @@
+[user]
+owner = chtseng
+notify_line = 0
+notify_email = 0
+notify_sms = 0
+
+[job]
+submit_from = chtseng-ml2
+submit_time = 2022/04/30 19:13:28
+job_path = /data/squeue/test/test_job.sh
+specified_time_run = none
+run_after_submit_min = 5
+esti_execute_hours = 1
+want_finish_before_date = 2022/04/30 21:00:00
+
+[host]
+specified_host = none
+reqs_cpus = 2
+reqs_ram = 3000
+reqs_gram = 0
+
+[status]
+execute_host = ML2
+process_id = 705077
+execute_start_time = 30/04/2022 19:20:01
+execute_live_time = 30/04/2022 19:20:01
+execute_end_time = 30/04/2022 19:30:02
+execute_status = finished
+execute_log = /data/squeue/jobs/logs/ML2_1651317208.log

@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /data/squeue/scripts
+/home/chtseng/envs/AI/bin/python user_submit.py

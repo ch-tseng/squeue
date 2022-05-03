@@ -1,0 +1,29 @@
+[user]
+owner = chtseng
+notify_line = 1
+notify_email = 0
+notify_sms = 0
+
+[job]
+submit_from = chtseng-ml2
+submit_time = 2022/05/03 13:13:26
+job_path = /data/squeue/test/test_job.sh
+specified_time_run = 2022/05/03 14:30:00
+run_after_submit_min = 0
+esti_execute_hours = 0
+want_finish_before_date = 2022/05/03 14:50:00
+
+[host]
+specified_host = ML6
+reqs_cpus = 0
+reqs_ram = 0
+reqs_gram = 0
+
+[status]
+execute_host = ML6
+process_id = 3276637
+execute_start_time = 2022/05/03 14:31:01
+execute_live_time = 2022/05/03 14:31:01
+execute_end_time = 2022/05/03 14:41:02
+execute_status = finished
+execute_log = /data/squeue/jobs/logs/ML6_1651554806.log

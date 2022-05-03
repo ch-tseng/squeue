@@ -1,0 +1,30 @@
+[user]
+owner = {owner}
+notify_line = {notify_line}
+notify_email = {notify_email}
+notify_sms = {notify_sms}
+
+[job]
+submit_from = {submit_from}
+submit_time = {submit_time}
+job_path = {job_path}
+when_to_execute = {when_to_execute}
+specified_time_run = {specified_time_run}
+run_after_submit_min = {run_after_submit_min}
+esti_execute_hours = {esti_execute_hours}
+want_finish_before_date = {want_finish_before_date}
+
+[host]
+specified_host = {specified_host}
+reqs_cpus = {reqs_cpus}
+reqs_ram = {reqs_ram}
+reqs_gram = {reqs_gram}
+
+[status]
+execute_host = {execute_host}
+process_id = {process_id}
+execute_start_time = {execute_start_time}
+execute_live_time = {execute_live_time}
+execute_end_time = {execute_end_time}
+execute_status = {execute_status}
+execute_log = {execute_log}
