@@ -47,6 +47,14 @@ while job_path is None:
         if os.path.exists(txt) is True:
             job_path = txt
 
+job_tags = None
+while job_tags is None:
+    txt = input("Tags for this job. (use , to separate) ")
+    if len(txt) > 0:
+        job_tags = txt
+    else:
+        job_tags = ''
+
 #q2 --------------------------------------------------------
 yn_specified_host = None
 while yn_specified_host is None:
@@ -100,19 +108,21 @@ else:
 when_to_execute = None
 while when_to_execute is None:
     print("When do you want this job to execute?")
-    txt = input("  (0:immediatelly, 1:after X hours, 2:on specified time, 3:let Queue-System decide) ")
-    if txt in ['0', '1','2', '3']:
+    txt = input("  (0:immediatelly, 1:after X hours, 2:on specified time, 3:let Queue-System decide, 4:After a job is finished) ")
+    if txt in ['0', '1','2', '3', '4']:
         when_to_execute = txt
 
 if when_to_execute == '0':
     specified_time_run = 'none'
     run_after_submit_min = '0'
     esti_execute_hours = '0'
+    wait_for_tag = ''
     want_finish_before_date = submit_time
 
 elif when_to_execute == '1':
     specified_time_run = 'none'
     esti_execute_hours = '0'
+    wait_for_tag = ''
     want_finish_before_date = submit_time
 
     run_after_submit_min = None
@@ -125,6 +135,7 @@ elif when_to_execute == '1':
 elif when_to_execute == '2':
     run_after_submit_min = '0'
     esti_execute_hours = '0'
+    wait_for_tag = ''
     want_finish_before_date = submit_time
 
     specified_time_run = None
@@ -142,6 +153,7 @@ elif when_to_execute == '2':
 elif when_to_execute == '3':
     specified_time_run = 'none'
     run_after_submit_min = '0'
+    wait_for_tag = ''
 
     esti_execute_hours = None
     while esti_execute_hours is None:
@@ -161,6 +173,19 @@ elif when_to_execute == '3':
                     want_finish_before_date = txt + ':00'
             except:
                 continue
+
+elif when_to_execute == '4':
+    specified_time_run = 'none'
+    run_after_submit_min = '0'
+    waitting_tag = 'none'
+    esti_execute_hours = '0'
+    want_finish_before_date = submit_time
+
+    wait_for_tag = None
+    while wait_for_tag is None:
+        txt = input("Please input the Tag for another job, your job will start to run while the job with the tag is finished. ")
+        if len(txt)>0:
+            wait_for_tag = txt
 
 #q10 --------------------------------------------------------
 notify_line = None
@@ -208,6 +233,8 @@ jobs_empty = jobs_empty.replace('{want_finish_before_date}', want_finish_before_
 jobs_empty = jobs_empty.replace('{reqs_cpus}', reqs_cpus)
 jobs_empty = jobs_empty.replace('{reqs_ram}', reqs_ram)
 jobs_empty = jobs_empty.replace('{reqs_gram}', reqs_gram)
+jobs_empty = jobs_empty.replace('{job_tags}', job_tags)
+jobs_empty = jobs_empty.replace('{wait_for_tag}', wait_for_tag)
 
 with open( os.path.join(base_path, 'jobs', 'waiting', jobid+'.job'),'w' ) as f:
     f.write(jobs_empty)

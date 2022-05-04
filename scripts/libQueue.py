@@ -98,7 +98,7 @@ class SQ:
             t1 = 'user'
 
         elif v in ['submit_from','submit_time','job_path','when_to_execute','run_after_submit_min','esti_execute_hours', \
-                   'specified_time_run', 'want_finish_before_date']:
+                   'specified_time_run', 'want_finish_before_date', 'job_tags', 'wait_for_tag']:
             t1 = 'job'
 
         elif v in ['specified_host','reqs_cpus','reqs_ram','reqs_gram']:
@@ -111,7 +111,8 @@ class SQ:
             return None
 
         if v in ['owner', 'submit_from','submit_time','job_path','specified_host','execute_host','process_id','execute_start_time',\
-                 'execute_live_time','execute_end_time','execute_status','execute_log', 'specified_time_run', 'want_finish_before_date']:
+                 'execute_live_time','execute_end_time','execute_status','execute_log', 'specified_time_run', 'want_finish_before_date',\
+                 'job_tags', 'wait_for_tag']:
             t2 = 's'  #string
         elif v in ['when_to_execute', 'notify_line', 'notify_email', 'notify_sms', 'run_after_submit_min', 'esti_execute_hours', \
                    'reqs_cpus','reqs_ram','reqs_gram']:

@@ -51,7 +51,7 @@ if not len(jobs)>0:
 process_id = None
 update_time = time.time()
 for job in jobs[:1]:
-    [job_file, exe_path, owner, notify_line, notify_email, notify_sms] = job
+    [job_file, exe_path, owner, job_tags, notify_line, notify_email, notify_sms] = job
 
     job_id = job_file.split('.')[0]
     job_path = os.path.join( host_info.base_path, 'jobs', 'queue', job_file)
@@ -78,3 +78,11 @@ for job in jobs[:1]:
 
     finish_jobfile()
     shutil.move(in_running_path, finished_path)
+
+    #將本job tag name 寫到jobs/logs/tag_finished 中, 通知該tag已結束
+    if len(job_tags.strip())>0:
+        now = datetime.now()
+        f_time = now.strftime("%Y/%m/%d %H:%M:%S")
+        with open( os.path.join(host_info.base_path, 'jobs', 'logs', 'tag_finished.info'),'a' ) as f:
+            f.write("{}|{}|{} \n".format(job_tags, job_id, f_time))
+

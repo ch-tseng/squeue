@@ -146,18 +146,25 @@ class HOSTINFO:
         if v in ['owner','notify_line','notify_email','notify_sms']:
             t1 = 'user'
 
-        elif v in ['submit_from','submit_time','job_path','run_after_submit_min','esti_execute_hours','want_finish_after_hours']:
+        elif v in ['submit_from','submit_time','job_path','when_to_execute','run_after_submit_min','esti_execute_hours', \
+                   'specified_time_run', 'want_finish_before_date', 'job_tags', 'wait_for_tag']:
             t1 = 'job'
 
-        elif v in ['reqs_cpus','reqs_ram','reqs_gram']:
+        elif v in ['specified_host','reqs_cpus','reqs_ram','reqs_gram']:
             t1 = 'host'
+
+        elif v in ['execute_host','process_id','execute_start_time','execute_live_time','execute_end_time','execute_status','execute_log']:
+            t1 = 'status'
 
         else:
             return None
 
-        if v in ['owner', 'submit_from','submit_time','job_path']:
+        if v in ['owner', 'submit_from','submit_time','job_path','specified_host','execute_host','process_id','execute_start_time',\
+                 'execute_live_time','execute_end_time','execute_status','execute_log', 'specified_time_run', 'want_finish_before_date',\
+                 'job_tags', 'wait_for_tag']:
             t2 = 's'  #string
-        elif v in ['notify_line', 'notify_email', 'notify_sms', 'run_after_submit_min', 'esti_execute_hours','want_finish_after_hours', 'reqs_cpus','reqs_ram','reqs_gram']:
+        elif v in ['when_to_execute', 'notify_line', 'notify_email', 'notify_sms', 'run_after_submit_min', 'esti_execute_hours', \
+                   'reqs_cpus','reqs_ram','reqs_gram']:
             t2 = 'i' #integer
         else:
             return None
@@ -202,10 +209,10 @@ class HOSTINFO:
 
             if os.path.isfile(job_path):
                 if f.split('_')[0] == self.hostname:
-                    [exe_path, owner, notify_line, notify_email, notify_sms] = \
-                        self.get_job_requirements(job_path, ['job_path','owner','notify_line','notify_email','notify_sms'])
+                    [exe_path, owner, job_tags, notify_line, notify_email, notify_sms] = \
+                        self.get_job_requirements(job_path, ['job_path','owner','job_tags','notify_line','notify_email','notify_sms'])
 
                     #print(owner)
-                    job_waits.append([f, exe_path, owner, notify_line, notify_email, notify_sms])
+                    job_waits.append([f, exe_path, owner, job_tags, notify_line, notify_email, notify_sms])
 
         return job_waits
