@@ -24,10 +24,7 @@ base_path = qhost.base_path
 now = datetime.now()
 submit_time = now.strftime("%Y/%m/%d %H:%M:%S")
 
-cmd = ''' whoami '''
-rtn = exec_cmd(cmd, timeout=1)
-if rtn is not None:
-    owner = rtn.strip()
+owner = qhost.username
 
 cmd = ''' hostname '''
 rtn = exec_cmd(cmd, timeout=1)
@@ -49,7 +46,7 @@ while job_path is None:
 
 job_tags = None
 while job_tags is None:
-    txt = input("Tags for this job. (use , to separate) ")
+    txt = input("Tags for this job. (empty, or use , to separate) ")
     if len(txt) > 0:
         job_tags = txt
     else:
@@ -304,4 +301,4 @@ else:
 
 if notify_line == '1':
     #lineNotify.line_notify('you submitted a job \n'+jobs_empty, img_path=None)
-    lineNotify.callWebLine('200334', 'JOB:{} submit'.format(jobid), jobs_empty)
+    lineNotify.callWebLine(owner, 'JOB:{} submit'.format(jobid), jobs_empty)

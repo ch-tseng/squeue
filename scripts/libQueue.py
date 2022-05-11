@@ -4,6 +4,8 @@ import time
 from configparser import ConfigParser
 import ast
 import glob
+import re
+import getpass
 
 class SQ:
     def __init__(self):
@@ -12,6 +14,14 @@ class SQ:
 
         self.th_seen_seconds = cfg.getint('global', 'th_seen_seconds')
         self.base_path = cfg.get('global', 'base_path')
+        self.th_cpu_busy = cfg.getint('global', 'th_cpu_busy')
+
+        if os.path.exists('/etc/centos-release'):
+            self.ubuntu = False
+        else:
+            self.ubuntu = True
+
+        self.username = getpass.getuser()
 
     def modification_date(self, file_path):
         t = os.path.getmtime(file_path)
@@ -22,15 +32,26 @@ class SQ:
         hosts.sort()
         self.host_list = hosts
 
+    def split_host_id(self, name):
+        match = re.match(r"([a-z]+)([0-9]+)", name, re.I)
+        if match:
+            items = match.groups()
+        else:
+            items = []
+
+        return items
+
     def update_host_data(self):
         self.hosts_qlist = ''
         hosts_status = {}
 
-        #hosts = os.listdir( os.path.join(self.base_path,'hosts'))
-        #hosts.sort()
         self.update_host_list()
-        hosts = self.host_list
-        for host in os.listdir( os.path.join(self.base_path,'hosts')):
+        host_path_list = os.listdir( os.path.join(self.base_path,'hosts'))
+
+        if self.ubuntu is False:
+            host_path_list.sort(key=self.split_host_id)
+
+        for host in host_path_list:
             host_path = os.path.join(self.base_path,'hosts',host)
             if os.path.isdir(host_path):
                 status_path = os.path.join(self.base_path,'hosts',host,'hardware.status')
@@ -39,25 +60,34 @@ class SQ:
 
                     if passed_seconds<self.th_seen_seconds:
                         with open(status_path, 'r') as f:
-                            self.hosts_qlist += f.read()
+                            fread = f.read()
+
+                            if self.ubuntu is False: fread += '\n'
+
+                            self.hosts_qlist += fread
                             lines = self.hosts_qlist.split('\n')
                             for line in lines:
                                 datas = line.split()
                                 if len(datas) == 10:
                                     #                             cores, loading, ram_available, grams
-                                    sdata = [ int(datas[1]), float(datas[2]), int(datas[5]), [int(datas[9])] ]
+                                    if datas[9] == 'x':
+                                        gpu_ram = 0
+                                    else:
+                                        gpu_ram = int(datas[9])
+
+                                    sdata = [ int(datas[1]), float(datas[2]), int(datas[5]), [gpu_ram] ]
                                 elif len(datas)>0:
-                                    sdata[3].append( int(datas[2]) )
+                                    sdata[3].append( float(datas[2]) )
 
                             hosts_status.update( {host:sdata} )
 
         self.hosts_status = hosts_status
 
     def status_header(self):
-        header = '{:10s} {:4s} {:8s} {:10s} {:10s} {:10s} {:5s} {:10s} {:10s} {:10s}\n'.format( \
+        header = '{:20s} {:4s} {:8s} {:10s} {:10s} {:10s} {:5s} {:10s} {:10s} {:10s}\n'.format( \
             'host', 'cpus','loading','total-ram','ram-used','ram-avail','gpus','total-gram','used-gram','free-gram')
-        header += '{:10s} {:4s} {:8s} {:10s} {:10s} {:10s} {:5s} {:10s} {:10s} {:10s}'.format( \
-            '-------','----','-------','---------','---------','---------','------','----------','----------','----------')
+        header += '{:20s} {:4s} {:8s} {:10s} {:10s} {:10s} {:5s} {:10s} {:10s} {:10s}'.format( \
+            '------------','----','-------','---------','---------','---------','------','----------','----------','----------')
         return header
 
 
@@ -81,7 +111,7 @@ class SQ:
             gram_avil_list = host_list[host][3]
 
             #print(cpu_loading, (ram_avil,r_ram), (cores,r_cpu))
-            if cpu_loading<50 and (ram_avil>=r_ram) and (cores>=r_cpu):
+            if cpu_loading<self.th_cpu_busy and (ram_avil>=r_ram) and (cores>=r_cpu):
                 if r_gram>0:
                     for i, g in enumerate(gram_avil_list):
                         if g>r_gram:
@@ -107,12 +137,15 @@ class SQ:
         elif v in ['execute_host','process_id','execute_start_time','execute_live_time','execute_end_time','execute_status','execute_log']:
             t1 = 'status'
 
+        elif v in ['stop_running', 'user_stop_time']:
+            t1 = 'command'
+
         else:
             return None
 
         if v in ['owner', 'submit_from','submit_time','job_path','specified_host','execute_host','process_id','execute_start_time',\
                  'execute_live_time','execute_end_time','execute_status','execute_log', 'specified_time_run', 'want_finish_before_date',\
-                 'job_tags', 'wait_for_tag']:
+                 'job_tags', 'wait_for_tag', 'stop_running', 'user_stop_time']:
             t2 = 's'  #string
         elif v in ['when_to_execute', 'notify_line', 'notify_email', 'notify_sms', 'run_after_submit_min', 'esti_execute_hours', \
                    'reqs_cpus','reqs_ram','reqs_gram']:
@@ -125,8 +158,8 @@ class SQ:
     def get_job_requirements(self, job_path, keyPara=[]):
         cfg_job = ConfigParser()
 
-        #if True:
-        try:
+        if True:
+        #try:
             cfg_job.read(job_path, encoding="utf-8")
 
             if len(keyPara)>0:
@@ -139,7 +172,7 @@ class SQ:
                         data = cfg_job.get(t1, key)
 
                     if key in ['submit_time', 'execute_start_time', 'execute_live_time', 'execute_end_time', 'specified_time_run', \
-                               'want_finish_before_date']:
+                               'want_finish_before_date', 'user_stop_time']:
                         try:
                             data = datetime.strptime(data, '%Y/%m/%d %H:%M:%S')
                         except:
@@ -156,9 +189,9 @@ class SQ:
 
                 return (r_cpu,r_ram,r_gram)
 
-        except:
-            print('[Warning] {} cannot load, please review the job file.'.format(job_path))
-            return None
+        #except:
+        #    print('[Warning] {} cannot load, please review the job file.'.format(job_path))
+        #    return None
 
 
     def can_hosts_basic(self, jobid):
@@ -207,6 +240,46 @@ class SQ:
                     job_list.append(j)
 
         return job_list
+
+    def running_job_list(self):
+        path = os.path.join(self.base_path, 'jobs', 'running')
+        flist = os.listdir(path)
+        flist.sort()
+        job_list = []
+        for j in flist:
+            filename, file_extension = os.path.splitext(j)
+            file_extension = file_extension.lower()
+
+            if(file_extension.lower() == '.job'):
+                job_path = os.path.join(path, j)
+                job_requ = self.get_job_requirements(job_path)
+                if job_requ is not None:
+                    job_list.append(j)
+
+        return job_list
+
+    def queueing_job_list(self):
+        path = os.path.join(self.base_path, 'jobs', 'queue')
+        flist = os.listdir(path)
+        flist.sort()
+        job_list = []
+        for j in flist:
+            filename, file_extension = os.path.splitext(j)
+            file_extension = file_extension.lower()
+
+            if(file_extension.lower() == '.job'):
+                job_path = os.path.join(path, j)
+                job_requ = self.get_job_requirements(job_path)
+                if job_requ is not None:
+                    job_list.append(j)
+
+        return job_list
+
+
+    def job_name_2_id(self, job):
+        tmp = job.replace('.job','')
+        tmp = tmp.split('_')[-1:]
+        return tmp
 
     def get_job_content(self, job_id):
         path = os.path.join(self.base_path, 'jobs')
