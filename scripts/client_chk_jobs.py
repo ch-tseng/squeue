@@ -88,12 +88,14 @@ for job in jobs[:1]:
     tmp_exec_path = None
     if '_gpu' in job_file:
         gpu_id = job_file.split('_')[1].replace('gpu','').strip()
-        print('GPU Interface', gpu_id)
+        darknet_port = str(int(gpu_id) + 8090)
+        #print('GPU Interface', gpu_id)
         with open(exe_path,'r') as f:
             exec_cmd = f.read()
 
         exec_cmd = exec_cmd.replace('{GPU}', gpu_id)
-        print('exec_cmd', exec_cmd)
+        exec_cmd = exec_cmd.replace('{DARKNET_PORT}', darknet_port)
+        #print('exec_cmd', exec_cmd)
         tmp_exec_path = os.path.join(host_info.base_path, 'hosts', host_info.hostname, 'exec_gpu_shell.sh')
         with open( tmp_exec_path, 'w') as f:
             f.write(exec_cmd)
@@ -118,6 +120,7 @@ for job in jobs[:1]:
         elif time.time()-update_time > 30:
             update_jobfile()
 
+        sys.stdout.flush()
         time.sleep(1)
 
     finish_jobfile()

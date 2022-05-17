@@ -22,7 +22,7 @@ class HOSTINFO:
         else:
             self.ubuntu = True
 
-        self.username = getpass.getuser()	
+        self.username = getpass.getuser()
 
     def exec_cmd(self, cmd_txt, timeout=2):
         try:

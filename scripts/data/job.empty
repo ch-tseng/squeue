@@ -13,12 +13,18 @@ specified_time_run = {specified_time_run}
 run_after_submit_min = {run_after_submit_min}
 esti_execute_hours = {esti_execute_hours}
 want_finish_before_date = {want_finish_before_date}
+job_tags = {job_tags}
+wait_for_tag = {wait_for_tag}
 
 [host]
 specified_host = {specified_host}
 reqs_cpus = {reqs_cpus}
 reqs_ram = {reqs_ram}
 reqs_gram = {reqs_gram}
+
+[command]
+stop_running = [False]
+user_stop_time = {user_stop_time}
 
 [status]
 execute_host = {execute_host}

@@ -41,6 +41,48 @@ class SQ:
 
         return items
 
+    def resource_job_reserve(self, host_name):
+        queue_path = os.path.join(self.base_path,'jobs', 'queue')
+        running_path = os.path.join(self.base_path,'jobs', 'running')
+
+        t_cpu, t_ram, gpu_gram = 0, 0, {}
+        for job_file in os.listdir(queue_path):
+            path_job_file = os.path.join(queue_path, job_file)
+            if os.path.isfile(path_job_file):
+                if job_file.split('_')[0] == host_name:
+                    r_cpu, r_ram, r_gram = self.get_job_requirements(path_job_file)
+                    t_cpu += r_cpu
+                    t_ram += r_ram
+                    if 'gpu' in job_file.split('_')[1]:
+                        gpu_id = int(job_file.split('_')[1].replace('gpu',''))
+                        if gpu_id in gpu_gram:
+                            t_gram = gpu_gram[gpu_id]
+                        else:
+                            t_gram = 0
+
+                        t_gram += r_gram
+                        gpu_gram.update( {gpu_id:t_gram} )
+
+        for job_file in os.listdir(running_path):
+            path_job_file = os.path.join(running_path, job_file)
+            if os.path.isfile(path_job_file):
+                if job_file.split('_')[0] == host_name:
+                    r_cpu, r_ram, r_gram = self.get_job_requirements(path_job_file)
+                    t_cpu += r_cpu
+                    t_ram += r_ram
+                    if 'gpu' in job_file.split('_')[1]:
+                        gpu_id = int(job_file.split('_')[1].replace('gpu',''))
+                        if gpu_id in gpu_gram:
+                            t_gram = gpu_gram[gpu_id]
+                        else:
+                            t_gram = 0
+
+                        t_gram += r_gram
+                        gpu_gram.update( {gpu_id:t_gram} )
+
+
+        return t_cpu, t_ram, gpu_gram
+
     def update_host_data(self):
         self.hosts_qlist = ''
         hosts_status = {}
@@ -110,10 +152,22 @@ class SQ:
             ram_avil = host_list[host][2]
             gram_avil_list = host_list[host][3]
 
+            #需扣除queue, running中, job所需要的resource
+            d_cpu, d_ram, d_gram_planned = self.resource_job_reserve(host_name=host)
+            print('主機{}, queue, running 中的jobs, 要保留CPU:{}, RAM:{}, GRAM:{}'.format(host,d_cpu,d_ram,d_gram_planned))
+            ram_avil = ram_avil - d_cpu
+            cores = cores - d_cpu
+
             #print(cpu_loading, (ram_avil,r_ram), (cores,r_cpu))
             if cpu_loading<self.th_cpu_busy and (ram_avil>=r_ram) and (cores>=r_cpu):
                 if r_gram>0:
                     for i, g in enumerate(gram_avil_list):
+                        if len(d_gram_planned)>0 and i in d_gram_planned:
+                            d_gram = d_gram_planned[i]
+                        else:
+                            d_gram = 0
+
+                        g = g - d_gram
                         if g>r_gram:
                             avil_host_list.update( { host+'_gpu'+str(i):[cpu_loading,cores,ram_avil,gram_avil_list] } )
 
@@ -166,6 +220,7 @@ class SQ:
                 rtn = []
                 for key in keyPara:
                     (t1,t2) = self.get_para_type(key)
+                    #print('t1,t2,key', t1,t2,key)
                     if t2 == 'i':
                         data = cfg_job.getint(t1, key)
                     elif t2 == 's':
